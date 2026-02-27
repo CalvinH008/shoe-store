@@ -50,4 +50,13 @@ class User extends Authenticatable
             'is_active' => 'boolean',
         ];
     }
+
+    public function carts(){
+        return $this->hasMany(Cart::class);
+    }
+
+    public function activeCart(){
+        return $this->hasOne(Cart::class)->where('status', 'active');
+    }
 }
+    

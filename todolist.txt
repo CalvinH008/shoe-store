@@ -1,0 +1,181 @@
+* 🚀 30 DAYS BACKEND ROADMAP – FROM ZERO TO SOLID
+* =========================
+* 🗓️ WEEK 1 – FUNDAMENTAL & STRUKTUR PROJECT
+* Fokus: Fondasi Backend yang Kuat
+* =========================
+* 📅 Hari 1–2: Setup & Struktur ✅
+* Install Laravel
+* Setup database
+* Rapikan folder structure
+* Buat model: Product, Category, User
+* Pelajari:
+* - MVC structure
+* - Routing (web.php)
+* - Controller basic
+* - Blade basic
+* 📅 Hari 3–4: Database Design (PENTING BANGET)
+* Buat ERD sederhana
+* Tabel:
+* - users
+* - categories
+* - products
+* - product_images
+* - carts
+* - cart_items
+* Relasi:
+* - Category hasMany Product
+* - Product belongsTo Category
+* - User hasMany Cart
+* - Cart hasMany CartItem
+* - CartItem belongsTo Product
+* Pelajari:
+* - Migration
+* - Foreign key
+* - onDelete cascade
+* - Eloquent relationship
+* ⚠️ STOP kalau relasi belum paham
+* 📅 Hari 5–6: CRUD Product (Tanpa UI Ribet)
+* Buat:
+* - Create product
+* - Edit product
+* - Delete product
+* - List product
+* Gunakan:
+* - Form request validation
+* - Resource controller
+* - Route grouping
+* - Mass assignment ($fillable)
+* 🎯 Target:
+* - Controller bersih
+* - Tidak ada logic numpuk
+* 📅 Hari 7: Refactor Day
+* Pisahkan logic ke ProductService
+* Rapikan naming
+* Cek konsistensi code
+* =========================
+* 🗓️ WEEK 2 – BUSINESS LOGIC & FLOW
+* Fokus: Cara Berpikir Backend
+* =========================
+* 📅 Hari 8–9: Cart System
+* Buat:
+* - Add to cart
+* - Update quantity
+* - Remove item
+* - Hitung total otomatis
+* Pelajari:
+* - DB Transaction
+* - Accessor / Mutator
+* - Attribute casting
+* 📅 Hari 10–11: Axios Integration
+* Ubah ke AJAX:
+* - Add to cart pakai Axios
+* - Delete cart pakai Axios
+* - Update qty pakai Axios
+* Pelajari:
+* - JSON response
+* - API route
+* - Response structure konsisten
+* Standard response:
+* { status: true, message: "", data: {} }
+* Backend harus clean & predictable
+* 📅 Hari 12–13: Authentication & Role
+* Implement:
+* - Login
+* - Register
+* - Middleware
+* - Role (admin / user)
+* Pelajari:
+* - Auth guard
+* - Middleware custom
+* - Authorization basic
+* 📅 Hari 14: Refactor Day
+* Hapus duplicate code
+* Gunakan helper
+* Rapikan response API
+* =========================
+* 🗓️ WEEK 3 – ADVANCED & SCALABLE THINKING
+* Di sini kamu naik level
+* =========================
+* 📅 Hari 15–16: Pagination & Filtering
+* Implement:
+* - Filter by category
+* - Search product
+* - Sort by price
+* - Pagination
+* Pelajari:
+* - Query builder
+* - Scope di model
+* - Clean query
+* Contoh clean query:
+* Product::active()->byCategory($id)->search($q)
+* 📅 Hari 17–18: File Upload
+* Upload gambar
+* Simpan di storage
+* Tampilkan image
+* Hapus image otomatis saat product dihapus
+* Pelajari:
+* - Storage
+* - symbolic link
+* - Accessor image URL
+* 📅 Hari 19–20: Order System (Checkout)
+* Buat:
+* - Order table
+* - Order items
+* - Checkout logic
+* - Kurangi stok otomatis
+* Pelajari:
+* - DB Transaction (WAJIB)
+* - Business logic separation
+* 📅 Hari 21: Refactor Besar
+* Implement Service layer
+* Optional: Repository pattern
+* Controller harus kurus
+* Tidak ada business logic di controller
+* =========================
+* 🗓️ WEEK 4 – API MINDSET & UI POLISH
+* Backend solid, baru sentuh UI
+* =========================
+* 📅 Hari 22–23: Standardisasi API
+* Buat:
+* - API endpoint product
+* - API endpoint cart
+* - API endpoint order
+* Pelajari:
+* - API Resource
+* - Consistent response
+* - Error handling
+* 📅 Hari 24–25: Alpine.js Integration
+* Toggle cart
+* Modal
+* Quantity button
+* Simple state management
+* Jangan overengineering
+* 📅 Hari 26–27: Tailwind Basic UI
+* Rapikan:
+* - Product grid
+* - Card
+* - Button
+* - Cart layout
+* - Checkout page
+* Fokus:
+* - Clean
+* - Readable
+* - Functional
+* 📅 Hari 28–29: Testing & Debugging
+* Tes edge case:
+* - Stok habis
+* - Qty minus
+* - Product tidak ada
+* Pelajari:
+* - try catch
+* - Logging
+* - Debugging mindset
+* 📅 Hari 30: Final Refactor & Review
+* Checklist akhir:
+* - Controller kurus
+* - Validation rapi
+* - Tidak ada query di blade
+* - Relasi digunakan benar
+* - Tidak ada duplicate logic
+* - Naming konsisten
+* - Folder structure clean
