@@ -23,10 +23,32 @@
                         <td> {{ $product->name }} </td>
                         <td> {{ $product->category->name }} </td>
                         <td> {{ number_format($product->price, 0, ',', '.') }} </td>
-                        <td> {{$product->stock}} </td>
+                        <td> {{ $product->stock }} </td>
+                        <td x-data=" { is_active: {{ $product->is_active ? 'true' : 'false' }} }">
+                            <button
+                                @click=" (async () => {
+                            const result = await toggleActive({{ $product->id }}, is_active);
+                            if (result !== undefined) is_active = result;
+                        })
+                        ()
+">
+                                <span x-text="is_active ? 'Aktif' : 'Nonaktif'"></span>
+                            </button>
+                        </td>
+                        <td>
+                            <a href=" {{ route('admin.products.edit', $product) }} ">Edit</a>
+                            <button @click=" deleteProduct( {{ $product->id }}, $el.closest('tr') ) ">
+                                Delete
+                            </button>
+                        </td>
                     </tr>
                 @empty
+                    <tr>
+                        <td colspan="6">No Products Available</td>
+                    </tr>
                 @endforelse
+            </tbody>
+        </table>
 
     </div>
 @endsection

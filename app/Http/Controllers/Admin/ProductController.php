@@ -118,6 +118,14 @@ class ProductController extends Controller
                     'is_active' => $request->boolean('is_active', true)
                 ]);
 
+                if($request->filled('removed_images')){
+                    $imagesToRemove = $product->images()->whereIn('id', $request->remove_images)->get();
+                    foreach($imagesToRemove as $image){
+                        Storage::disk('public')->delete($image->image_path);
+                        $image->delete();
+                    }
+                }
+
                 if ($request->hasFile('images')) {
                     foreach ($request->file('images') as $index => $image) {
                         $path = $image->store('products', 'public');
@@ -126,6 +134,15 @@ class ProductController extends Controller
                             'is_primary' => false,
                             'sort_order' => $product->images()->count() + $index
                         ]);
+                    }
+                }
+
+                if($request->filled('primary_image')){
+                    $product->images()->update(['is_primary' => false]);
+                    $primaryValue = $request->primary_image;
+                    if(str_starts_with($primaryValue, 'existing-')){
+                        $imageId = str_replace('existing-', '', $primaryValue);
+                        $product->images()->where('id', $imageId)->update(['is_primary' => true]);
                     }
                 }
             });
