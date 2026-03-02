@@ -18,8 +18,12 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['category_id', 'primaryImage'])->latest()->paginate(10);
-        return view('admin.products.index', compact('products'));
+        $products = Product::with(['category', 'primaryImage'])->latest()->paginate(10);
+        return response()->json([
+            'status' => true,
+            'message' => 'Data produk berhasil diambil',
+            'data' => $products
+        ]);
     }
 
     /**
@@ -69,7 +73,7 @@ class ProductController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Product Created Successfully',
-                'data' => $product->load('image')
+                'data' => $product->load('images')
                 // load() untuk sertakan data image sekalian di response     
             ], 201);
 
@@ -118,9 +122,9 @@ class ProductController extends Controller
                     'is_active' => $request->boolean('is_active', true)
                 ]);
 
-                if($request->filled('removed_images')){
-                    $imagesToRemove = $product->images()->whereIn('id', $request->remove_images)->get();
-                    foreach($imagesToRemove as $image){
+                if ($request->filled('removed_images')) {
+                    $imagesToRemove = $product->images()->whereIn('id', $request->removed_images)->get();
+                    foreach ($imagesToRemove as $image) {
                         Storage::disk('public')->delete($image->image_path);
                         $image->delete();
                     }
@@ -137,10 +141,10 @@ class ProductController extends Controller
                     }
                 }
 
-                if($request->filled('primary_image')){
+                if ($request->filled('primary_image')) {
                     $product->images()->update(['is_primary' => false]);
                     $primaryValue = $request->primary_image;
-                    if(str_starts_with($primaryValue, 'existing-')){
+                    if (str_starts_with($primaryValue, 'existing-')) {
                         $imageId = str_replace('existing-', '', $primaryValue);
                         $product->images()->where('id', $imageId)->update(['is_primary' => true]);
                     }
@@ -148,14 +152,14 @@ class ProductController extends Controller
             });
 
             return response()->json([
-                'status' => false,
+                'status' => true,
                 'message' => 'Product Updated Successfully',
                 'data' => $product->fresh()->load('images')
                 // fresh() untuk mengambil data paling baru dari database setelah diupdate
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => true,
+                'status' => false,
                 'message' => 'Product Upload Failed',
                 'error' => $e->getMessage()
             ]);
@@ -204,7 +208,7 @@ class ProductController extends Controller
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => true,
+                'status' => false,
                 'message' => 'Failed To update product status',
                 'error' => $e->getMessage()
             ], 500);

@@ -13,7 +13,7 @@
 * - Routing (web.php)
 * - Controller basic
 * - Blade basic
-* 📅 Hari 3–4: Database Design (PENTING BANGET)
+* 📅 Hari 3–4: Database Design (PENTING BANGET) ✅
 * Buat ERD sederhana
 * Tabel:
 * - users
@@ -34,7 +34,7 @@
 * - onDelete cascade
 * - Eloquent relationship
 * ⚠️ STOP kalau relasi belum paham
-* 📅 Hari 5–6: CRUD Product (Tanpa UI Ribet)
+* 📅 Hari 5–6: CRUD Product (Tanpa UI Ribet) ✅
 * Buat:
 * - Create product
 * - Edit product
