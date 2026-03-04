@@ -79,7 +79,7 @@ class ProductController extends Controller
             $primaryImage = $request->primary_image;
             $removedImages = $request->input('removed_images', []);
 
-            $product = $this->productService->update($product, $data, $images, $removedImages, $primaryImage);
+            $product = $this->productService->update($product, $data, $primaryImage, $removedImages, $images);
 
             return response()->json([
                 'status' => true,

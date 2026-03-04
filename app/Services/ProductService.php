@@ -39,7 +39,7 @@ class ProductService
         return $product;
     }
 
-    public function update(Product $product, array $data, array $images = [], array $removedImages, string $primaryImage)
+    public function update(Product $product, array $data, string $primaryImage,  array $removedImages, array $images = [])
     {
         $product = DB::transaction(function () use ($data, $images, $primaryImage, $product, $removedImages) {
             $product->update([
