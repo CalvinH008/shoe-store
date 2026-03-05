@@ -53,18 +53,16 @@ class ProductController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Product Created Successfully',
-                'data' => $product->load('images')
                 // load() untuk sertakan data image sekalian di response     
-            ], 201);
-            // 201 http code "Created"
+                'data' => $product->load('images')
+            ], 201); // 201 http code "Created"
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' => 'Product Addition Failed',
-                'error' => $e->getMessage()
                 // getMessage() untuk menjelaskan apa errornya
-            ], 500);
-            // http code 500 yaitu status error
+                'error' => $e->getMessage()
+            ], 500); // http code 500 yaitu status error
         }
     }
 

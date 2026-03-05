@@ -20,7 +20,7 @@ class CartService
 
         $cartItem->increment('quantity', $quantity);
 
-        return $cart->load('items');
+        return $cart->load('items.product');
     }
 
     public function updateQuantity(int $userId, int $cartItemId, int $quantity){
@@ -40,6 +40,33 @@ class CartService
         $cartItem->update([
             'quantity' => $quantity
         ]);
+
+        // eager load
         return $cart->load('items.product');
     }
+
+    public function removeItem(int $userId, int $cartItemId){
+        // ambil cart milik user yang active
+        $cart = Cart::where('user_id', $userId)
+                    ->where('status', 'active')
+                    ->firstOrFail();
+
+        // cari item lewat relasi cart
+        $cartItem = $cart->items()->where('id', $cartItemId)->firstOrFail();
+
+        // delete item
+        $cartItem->delete();
+
+        // eager load
+        return $cart->load('items.product');
+    }
+
+    public function getCart(int $userId){
+        // ambil cart user yang active
+        $cart = Cart::where('user_id', $userId)
+                    ->where('status', 'active')
+                    ->firstOrFail();
+
+        return $cart->load('items.product');
+    }   
 }

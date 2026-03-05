@@ -95,8 +95,8 @@ class ProductService
     public function toggleActive(Product $product)
     {
         $product->update([
-            'is_active' => !$product->is_active
             // ubah nilai boolean true jadi false false jadi true 
+            'is_active' => !$product->is_active
         ]);
     }
 }
