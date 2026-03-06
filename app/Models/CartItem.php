@@ -12,6 +12,11 @@ class CartItem extends Model
         'product_id',
         'quantity'
     ];
+    protected $casts = [
+        'cart_id' => 'integer',
+        'product_id' => 'integer',
+        'quantity' => 'integer', // quantity selalu int, bukan string
+    ];
 
     public function cart(){
         return $this->belongsTo(Cart::class);
@@ -20,5 +25,12 @@ class CartItem extends Model
     public function product(){
         return $this->belongsTo(Product::class);
     }
+
+    // access mutator
+    
+    public function getSubtotalAttribute(){
+        return $this->product->price * $this->quantity;
+    } 
+
 }
     
