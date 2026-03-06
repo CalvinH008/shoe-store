@@ -99,4 +99,28 @@ class ProductService
             'is_active' => !$product->is_active
         ]);
     }
+
+    public function getAll(array $filters = []) {
+        $query = Product::with(['category', 'primaryImage'])->where('is_active', true);
+
+        if(!empty($filters['search'])){
+            $query->where('name', 'like', '%' . $filters['search'] . '%');
+        };
+
+        if(!empty($filters['category'])){
+            $query->where('category' . $filters['search']);
+        }
+
+        if(!empty($filters['sort'])){
+            match($filters['sort']){
+                'price_asc' => $query->orderBy('price', 'asc'),
+                'price_desc' => $query->orderBy('price', 'desc'),
+                default => $query->latest()
+            };
+        }else{
+            $query->latest();
+        }
+
+        return $query->paginate(12);
+    }
 }
