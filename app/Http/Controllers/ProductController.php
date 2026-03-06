@@ -13,7 +13,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         try {
-            $filters = $request->only(['search', 'category' . 'sort']);
+            $filters = $request->only(['search', 'category', 'sort']);
             $products = $this->productService->getAll($filters);
             $categories = Category::all();
             return view('products.index', compact('products', 'categories'));

@@ -19,7 +19,7 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="{{ asset('js/cart.js') }}"></script>
+    <script src="{{ asset('js/store/cart.js') }}"></script>
     @stack('scripts')
 </body>
 
