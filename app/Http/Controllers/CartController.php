@@ -112,4 +112,31 @@ class CartController extends Controller
             ], 500);
         }
     }
+
+    public function clearCart(): JsonResponse
+    {
+        try {
+            $cart = $this->cartService->clearCart(auth()->id());
+
+            if(!$cart){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Cart Not Found',
+                    'data' => null
+                ], 404);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Cart Cleared!',
+                'data' => $cart
+            ]);
+        } catch (\Exception $error) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed To Clear Cart',
+                'data' => null
+            ], 500);
+        }
+    }
 }

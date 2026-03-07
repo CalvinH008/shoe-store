@@ -106,4 +106,22 @@ class CartService
 
         return $cart->load('items.product');
     }
+
+    public function clearCart(int $userId): ?Cart
+    {
+        return DB::transaction(function () use ($userId) {
+            $cart = Cart::where([
+                'user_id' => $userId,
+                'status' => 'active'
+            ])->first();
+
+            if(!$cart){
+                return null;
+            }
+
+            $cart->items()->delete();
+
+            return $cart->load('items.product');
+        });
+    }
 }
