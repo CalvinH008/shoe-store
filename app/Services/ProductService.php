@@ -105,7 +105,7 @@ class ProductService
         $query = Product::with(['category', 'primaryImage'])->where('is_active', true);
 
         if (!empty($filters['search'])) {
-            $query->where('name', 'like', '%', $filters['search'] . '%');
+            $query->where('name', 'like', '%' . $filters['search'] . '%');
         };
 
         if (!empty($filters['category'])) {

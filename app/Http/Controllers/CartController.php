@@ -14,9 +14,7 @@ class CartController extends Controller
     public function addItem(AddItemRequest $request)
     {
         try {
-            // $userId = auth()->id();
-            $userId = 1;
-
+            $userId = auth()->id();
             $cart = $this->cartService->addItem(
                 $userId,
                 $request->validated('product_id'),
@@ -46,8 +44,7 @@ class CartController extends Controller
     public function updateQuantity(UpdateQuantityRequest $request, int $cartItemId)
     {
         try {
-            // $userId = auth()->id();
-            $userId = 1;
+            $userId = auth()->id();
             $cart = $this->cartService->updateQuantity(
                 $userId,
                 $cartItemId,
@@ -78,8 +75,7 @@ class CartController extends Controller
     public function removeItem(Request $request, int $cartItemId)
     {
         try {
-            // $userId = auth()->id();
-            $userId = 1;
+            $userId = auth()->id();
             $cartItemId = $cartItemId; // valuenya dari url
 
             $cart = $this->cartService->removeItem($userId, $cartItemId);
@@ -100,8 +96,7 @@ class CartController extends Controller
     public function getCart()
     {
         try {
-            // $userId = auth()->id();
-            $userId = 1;
+            $userId = auth()->id();
             $cart = $this->cartService->getCart($userId);
 
             return response()->json([

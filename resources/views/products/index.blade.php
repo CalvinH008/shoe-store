@@ -4,6 +4,12 @@
 
 @section('content')
 
+<nav>
+    <form action=" {{route('logout')}} " method="POST">
+        @csrf
+        <button type="submit">Logout</button>
+    </form>
+</nav>
     {{-- form filter dan sort --}}
     <form method="GET" action="{{ route('products.index') }}">
 
