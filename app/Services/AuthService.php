@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthService
 {
-    public function register(array $data)
+    public function register(array $data): User
     {
         $user = User::create([
             'name' => $data['name'],
@@ -21,7 +21,7 @@ class AuthService
         return $user;
     }
 
-    public function login(array $credentials, bool $remember = false)
+    public function login(array $credentials, bool $remember = false): bool
     {
         if (!Auth::attempt($credentials, $remember)) {
             return false;
@@ -36,14 +36,14 @@ class AuthService
         return true;
     }
 
-    public function logout()
+    public function logout(): void
     {
         Auth::logout();
         request()->session()->invalidate();
         request()->session()->regenerateToken();
     }
 
-    public function redirectAfterLogin()
+    public function redirectAfterLogin(): string
     {
         return Auth::user()->role === 'admin' ? route('admin.products.index') : route('products.index');
     }

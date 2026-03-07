@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductService
 {
-    public function store(array $data, array $images, int $primaryImage)
+    public function store(array $data, array $images, int $primaryImage): Product
     {
         // DB::transaction kalau saat transaksi ada yang gagal, batalkan semua rollback
         $product = DB::transaction(function () use ($data, $images, $primaryImage) {
@@ -39,7 +39,7 @@ class ProductService
         return $product;
     }
 
-    public function update(Product $product, array $data, string $primaryImage,  array $removedImages, array $images = [])
+    public function update(Product $product, array $data, string $primaryImage,  array $removedImages, array $images = []): Product
     {
         $product = DB::transaction(function () use ($data, $images, $primaryImage, $product, $removedImages) {
             $product->update([
@@ -82,7 +82,7 @@ class ProductService
         return $product;
     }
 
-    public function destroy(Product $product)
+    public function destroy(Product $product): void
     {
         DB::transaction(function () use ($product) {
             foreach ($product->images as $image) {
@@ -92,7 +92,7 @@ class ProductService
         });
     }
 
-    public function toggleActive(Product $product)
+    public function toggleActive(Product $product): void
     {
         $product->update([
             // ubah nilai boolean true jadi false false jadi true 
@@ -106,7 +106,7 @@ class ProductService
 
         if (!empty($filters['search'])) {
             $query->where('name', 'like', '%' . $filters['search'] . '%');
-        };
+        }
 
         if (!empty($filters['category'])) {
             $query->where('category_id', $filters['category']);
@@ -123,5 +123,13 @@ class ProductService
         }
 
         return $query->paginate(12);
+    }
+
+    public function getAllForAdmin()
+    {
+        return Product::with([
+            'category',
+            'primaryImage'
+        ])->latest()->paginate(10);
     }
 }

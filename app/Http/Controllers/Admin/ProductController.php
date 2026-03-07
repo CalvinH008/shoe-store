@@ -8,9 +8,7 @@ use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Services\ProductService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\JsonResponse;
 
 class ProductController extends Controller
 {
@@ -19,9 +17,9 @@ class ProductController extends Controller
      */
 
     public function __construct(private ProductService $productService) {}
-    public function index()
+    public function index(): JsonResponse
     {
-        $products = Product::with(['category', 'primaryImage'])->latest()->paginate(10);
+        $products = $this->productService->getAllForAdmin();
         return response()->json([
             'status' => true,
             'message' => 'Data produk berhasil diambil',
@@ -41,7 +39,7 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProductRequest $request)
+    public function store(StoreProductRequest $request): JsonResponse
     {
         try {
             $data = $request->only('category_id', 'name', 'slug', 'price', 'stock', 'description', 'is_active');
@@ -61,7 +59,7 @@ class ProductController extends Controller
                 'status' => false,
                 'message' => 'Product Addition Failed',
                 // getMessage() untuk menjelaskan apa errornya
-                'error' => $e->getMessage()
+                'data' => null
             ], 500); // http code 500 yaitu status error
         }
     }
@@ -69,7 +67,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product): JsonResponse
     {
         try {
             $data = $request->only('category_id', 'name', 'slug', 'price', 'stock', 'description', 'is_active');
@@ -88,8 +86,8 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Product Upload Failed',
-                'error' => $e->getMessage()
+                'message' => 'Product Update Failed',
+                'data' => null
             ]);
         }
     }
@@ -97,7 +95,7 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product): JsonResponse
     {
         try {
             $this->productService->destroy($product);
@@ -116,21 +114,22 @@ class ProductController extends Controller
         }
     }
 
-    public function toggleActive(Product $product)
+    public function toggleActive(Product $product): JsonResponse
     {
         try {
             $this->productService->toggleActive($product);
+            $fresh = $product->fresh();
 
             return response()->json([
                 'status' => true,
-                'message' => !$product->is_active ? 'Product activated successfully!' : 'Product deactivated successfully!',
-                'data' => $product
+                'message' => $fresh->is_active ? 'Product activated successfully!' : 'Product deactivated successfully!',
+                'data' => $fresh
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' => 'Failed To update product status',
-                'error' => $e->getMessage()
+                'data' => null
             ], 500);
         }
     }

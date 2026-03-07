@@ -6,33 +6,34 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Services\AuthService;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class AuthController extends Controller
 {
     public function __construct(private AuthService $authService) {}
 
-    public function showLogin()
+    public function showLogin(): View
     {
         return view('auth.login');
     }
 
-    public function showRegister()
+    public function showRegister(): View
     {
         return view('auth.register');
     }
 
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request): RedirectResponse
     {
         try {
             $this->authService->register($request->validated());
             return redirect($this->authService->redirectAfterLogin());
         } catch (\Exception $error) {
-            return back()->withErrors(['error', 'Registration Failed. Try Again.']);
+            return back()->withErrors(['error' => 'Registration Failed. Try Again.']);
         }
     }
 
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): RedirectResponse
     {
         try {
             $credentials = $request->only(['email', 'password']);
@@ -53,8 +54,9 @@ class AuthController extends Controller
             return back()->withErrors(['error' => 'Login Failed. Try Again']);
         }
     }
-    
-    public function logout(){
+
+    public function logout(): RedirectResponse
+    {
         $this->authService->logout();
         return redirect()->route('login');
     }

@@ -43,14 +43,14 @@ class CartService
         });
     }
 
-    public function updateQuantity(int $userId, int $cartItemId, int $quantity)
+    public function updateQuantity(int $userId, int $cartItemId, int $quantity): Cart
     {
         // harus diluar transaction
         if ($quantity < 1) {
             throw new \InvalidArgumentException('Quantity must be at least 1');
         }
 
-        DB::transaction(function () use ($userId, $cartItemId, $quantity) {
+        return DB::transaction(function () use ($userId, $cartItemId, $quantity) {
             // ambil cart milik user yang active
             $cart = Cart::where('user_id', $userId)
                 ->where('status', 'active')
@@ -63,7 +63,7 @@ class CartService
 
             if ($quantity > $cartItem->product->stock) {
                 throw new \InvalidArgumentException(
-                    'Quantity exceeds stock. Stock available: {$cartItem->product->stock}'
+                    "Quantity exceeds stock. Stock available: {$cartItem->product->stock}"
                 );
             }
             // update quantity
@@ -76,7 +76,7 @@ class CartService
         });
     }
 
-    public function removeItem(int $userId, int $cartItemId)
+    public function removeItem(int $userId, int $cartItemId): Cart
     {
 
         return DB::transaction(function () use ($userId, $cartItemId) {
@@ -96,7 +96,7 @@ class CartService
         });
     }
 
-    public function getCart(int $userId)
+    public function getCart(int $userId): Cart
     {
         // ambil cart user yang active
         $cart = Cart::firstOrCreate([

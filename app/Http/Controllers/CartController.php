@@ -5,13 +5,34 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AddItemRequest;
 use App\Http\Requests\UpdateQuantityRequest;
 use App\Services\CartService;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class CartController extends Controller
 {
     public function __construct(private CartService $cartService) {}
 
-    public function addItem(AddItemRequest $request)
+
+    public function getCart(): JsonResponse
+    {
+        try {
+            $userId = auth()->id();
+            $cart = $this->cartService->getCart($userId);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Cart Retrieved Successfully!',
+                'data' => $cart
+            ]);
+        } catch (\Exception $error) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Cart Retrieve Failed',
+                'data' => null
+            ], 500);
+        }
+    }
+
+    public function addItem(AddItemRequest $request): JsonResponse
     {
         try {
             $userId = auth()->id();
@@ -41,7 +62,7 @@ class CartController extends Controller
         }
     }
 
-    public function updateQuantity(UpdateQuantityRequest $request, int $cartItemId)
+    public function updateQuantity(UpdateQuantityRequest $request, int $cartItemId): JsonResponse
     {
         try {
             $userId = auth()->id();
@@ -72,13 +93,12 @@ class CartController extends Controller
         }
     }
 
-    public function removeItem(Request $request, int $cartItemId)
+    public function removeItem(int $cartItemId): JsonResponse
     {
         try {
             $userId = auth()->id();
-            $cartItemId = $cartItemId; // valuenya dari url
-
             $cart = $this->cartService->removeItem($userId, $cartItemId);
+
             return response()->json([
                 'status' => true,
                 'message' => 'Item Removed Successfully!',
@@ -89,26 +109,6 @@ class CartController extends Controller
                 'status' => false,
                 'message' => 'Failed To Remove Item ',
                 'data' => null
-            ], 500);
-        }
-    }
-
-    public function getCart()
-    {
-        try {
-            $userId = auth()->id();
-            $cart = $this->cartService->getCart($userId);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Cart Retrieved Successfully!',
-                'data' => $cart
-            ]);
-        } catch (\Exception $error) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Cart Retrieved Failed',
-                'data' => $error->getMessage()
             ], 500);
         }
     }
