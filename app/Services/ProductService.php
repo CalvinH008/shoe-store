@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Product;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -100,32 +101,17 @@ class ProductService
         ]);
     }
 
-    public function getAll(array $filters = [])
+    public function getAll(array $filters = []): LengthAwarePaginator
     {
-        $query = Product::with(['category', 'primaryImage'])->where('is_active', true);
-
-        if (!empty($filters['search'])) {
-            $query->where('name', 'like', '%' . $filters['search'] . '%');
-        }
-
-        if (!empty($filters['category'])) {
-            $query->where('category_id', $filters['category']);
-        }
-
-        if (!empty($filters['sort'])) {
-            match ($filters['sort']) {
-                'price_asc' => $query->orderBy('price', 'asc'),
-                'price_desc' => $query->orderBy('price', 'desc'),
-                default => $query->latest()
-            };
-        } else {
-            $query->latest();
-        }
-
-        return $query->paginate(12);
+        return Product::with(['category', 'primary_image'])
+            ->active()
+            ->search($filters['search'] ?? null)
+            ->filterByCategory($filters['category'] ?? null)
+            ->sortBy($filters['sort'] ?? null)
+            ->paginate(12);
     }
 
-    public function getAllForAdmin()
+    public function getAllForAdmin(): LengthAwarePaginator
     {
         return Product::with([
             'category',

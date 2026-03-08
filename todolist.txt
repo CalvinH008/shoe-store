@@ -48,7 +48,7 @@
 * 🎯 Target:
 * - Controller bersih
 * - Tidak ada logic numpuk
-* 📅 Hari 7: Refactor Day
+* 📅 Hari 7: Refactor Day ✅
 * Pisahkan logic ke ProductService
 * Rapikan naming
 * Cek konsistensi code
@@ -56,7 +56,7 @@
 * 🗓️ WEEK 2 – BUSINESS LOGIC & FLOW
 * Fokus: Cara Berpikir Backend
 * =========================
-* 📅 Hari 8–9: Cart System
+* 📅 Hari 8–9: Cart System ✅
 * Buat:
 * - Add to cart
 * - Update quantity
@@ -66,7 +66,7 @@
 * - DB Transaction
 * - Accessor / Mutator
 * - Attribute casting
-* 📅 Hari 10–11: Axios Integration
+* 📅 Hari 10–11: Axios Integration ✅
 * Ubah ke AJAX:
 * - Add to cart pakai Axios
 * - Delete cart pakai Axios
@@ -78,7 +78,7 @@
 * Standard response:
 * { status: true, message: "", data: {} }
 * Backend harus clean & predictable
-* 📅 Hari 12–13: Authentication & Role
+* 📅 Hari 12–13: Authentication & Role ✅
 * Implement:
 * - Login
 * - Register
@@ -88,7 +88,7 @@
 * - Auth guard
 * - Middleware custom
 * - Authorization basic
-* 📅 Hari 14: Refactor Day
+* 📅 Hari 14: Refactor Day ✅
 * Hapus duplicate code
 * Gunakan helper
 * Rapikan response API
