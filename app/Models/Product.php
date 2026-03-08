@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use League\Uri\Builder;
 
 class Product extends Model
 {
@@ -70,7 +70,7 @@ class Product extends Model
         return match ($sort) {
             'price_asc' => $query->orderBy('price', 'asc'),
             'price_desc' => $query->orderBy('price', 'desc'),
-            default => latest()
+            default => $query->latest()
         };
     }
 }

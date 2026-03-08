@@ -103,7 +103,7 @@ class ProductService
 
     public function getAll(array $filters = []): LengthAwarePaginator
     {
-        return Product::with(['category', 'primary_image'])
+        return Product::with(['category', 'primaryImage'])
             ->active()
             ->search($filters['search'] ?? null)
             ->filterByCategory($filters['category'] ?? null)

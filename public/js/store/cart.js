@@ -3,7 +3,7 @@ const csrfToken = document
     .querySelector('meta[name="csrf-token"]')
     .getAttribute("content");
 
-axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = '';
 axios.defaults.headers.common["X-CSRF-TOKEN"] = csrfToken;
 axios.defaults.headers.common["Accept"] = "application/json";
 axios.defaults.headers.common["Content-Type"] = "application/json";
