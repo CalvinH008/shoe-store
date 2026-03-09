@@ -23,16 +23,19 @@ class ProductService
                 'is_active' => $data['is_active'] ?? true
             ]);
 
-            // simpan semua foto
-            foreach ($images as $index => $image) {
-                $path = $image->store('products', 'public');
-                // Simpan di storage/app/public/products/
-                // Akses via: asset('storage/products/namafile.jpg')
+            if (!empty($images)) {
+                // simpan semua foto
+                foreach ($images as $index => $image) {
+                    $path = $image->store('products', 'public');
+                    // Simpan di storage/app/public/products/
+                    // Akses via: asset('storage/products/namafile.jpg')
 
-                $product->images()->create([
-                    'image_path' => $path,
-                    'is_primary' => $index === $primaryImage,
-                ]);
+                    $product->images()->create([
+                        'image_path' => $path,
+                        'is_primary' => $index === $primaryImage,
+                        'sort_order' => $index
+                    ]);
+                }
             }
 
             return $product;
