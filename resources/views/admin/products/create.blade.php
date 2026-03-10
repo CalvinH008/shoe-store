@@ -15,7 +15,7 @@
             <div>
                 <label for="">Category</label>
                 <select x-model="form.category_id">
-                    <option value="">Choose Catogory</option>
+                    <option value="">Choose Category</option>
                     @foreach ($categories as $category)
                         <option value=" {{ $category->id }} "> {{ $category->name }} </option>
                     @endforeach
@@ -24,7 +24,7 @@
 
             <div>
                 <label for="">Product Name</label>
-                <input type="text" x-model="form.nama" @input=" generateSlug() ">
+                <input type="text" x-model="form.name" @input="generateSlug()">
             </div>
 
             <div>
@@ -79,6 +79,7 @@
 
             <button type="submit" :disabled="loading">
                 <span x-text="loading ? 'Menyimpan...' : 'Simpan Produk'"></span>
+                add
             </button>
         </form>
 

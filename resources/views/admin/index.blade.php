@@ -1,54 +1,57 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div x-data="productManager()">
-        <div x-show="message" x-text="message" :class="isError ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'"
-            style="padding:10px; margin-bottom:10px;">
-        </div>
-        <a href=" {{ route('admin.products.create') }} ">+ Add Product </a>
+    <div x-data="productManager()" x-init="fetchProducts()">
+
+        {{-- Notifikasi --}}
+        <div x-show="message" x-text="message" style="padding:10px; margin-bottom:10px;"></div>
+
+        <a href="{{ route('admin.products.create') }}">+ Add Product</a>
+
         <table border="1" cellpadding="8" style="width:100%; margin-top:10px;">
             <thead>
                 <tr>
-                    <th>Nama</th>
-                    <th>Kategori</th>
-                    <th>Harga</th>
-                    <th>Stok</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
                     <th>Status</th>
-                    <th>Aksi</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($products as $product)
-                    <tr id="product-row-{{ $product->id }}">
-                        <td> {{ $product->name }} </td>
-                        <td> {{ $product->category->name }} </td>
-                        <td> {{ number_format($product->price, 0, ',', '.') }} </td>
-                        <td> {{ $product->stock }} </td>
-                        <td x-data=" { is_active: {{ $product->is_active ? 'true' : 'false' }} }">
+                <template x-for="product in products" :key="product.id">
+                    <tr :id="'product-row-' + product.id">
+                        <td x-text="product.name"></td>
+                        <td x-text="product.category.name"></td>
+                        <td x-text="'Rp ' + product.price.toLocaleString('id-ID')"></td>
+                        <td x-text="product.stock"></td>
+                        <td>
                             <button
-                                @click=" (async () => {
-                            const result = await toggleActive({{ $product->id }}, is_active);
-                            if (result !== undefined) is_active = result;
-                        })
-                        ()
-">
-                                <span x-text="is_active ? 'Aktif' : 'Nonaktif'"></span>
+                                @click="toggleActive(product.id, product.is_active); product.is_active = !product.is_active">
+                                <span x-text="product.is_active ? 'Active' : 'Inactive'"></span>
                             </button>
                         </td>
                         <td>
-                            <a href=" {{ route('admin.products.edit', $product) }} ">Edit</a>
-                            <button @click=" deleteProduct( {{ $product->id }}, $el.closest('tr') ) ">
-                                Delete
-                            </button>
+                            <a :href="'/admin/products/' + product.id + '/edit'">Edit</a>
+                            <button @click="deleteProduct(product.id, $el.closest('tr'))">Delete</button>
                         </td>
                     </tr>
-                @empty
+                </template>
+                <template x-if="products.length === 0">
                     <tr>
                         <td colspan="6">No Products Available</td>
                     </tr>
-                @endforelse
+                </template>
             </tbody>
         </table>
+
+        {{-- Pagination --}}
+        <div style="margin-top:10px;">
+            <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1">Previous</button>
+            <span x-text="'Page ' + currentPage + ' of ' + lastPage"></span>
+            <button @click="changePage(currentPage + 1)" :disabled="currentPage === lastPage">Next</button>
+        </div>
 
     </div>
 @endsection

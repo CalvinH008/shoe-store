@@ -27,7 +27,7 @@ function productManager() {
 
             try {
                 const response = await axios.delete(
-                    "/admin/products/${productId}",
+                    `/admin/products/${productId}`,
                 );
 
                 if (response.data.status) {
@@ -65,7 +65,7 @@ function productManager() {
                 }
             } catch (error) {
                 this.showNotif(
-                    response?.data?.message ?? "Failed To Update!",
+                    error.response?.data?.message ?? "Failed To Update!",
                     true,
                 );
             }
@@ -147,15 +147,29 @@ function productCreate() {
                     }, 1000);
                 }
             } catch (error) {
-                if(error.response?.status === 422){
+                if (error.response?.status === 422) {
                     const errors = error.response.data.errors;
-                    this.message = Object.values(errors).flat().join(', ');
-                }else{
-                    this.message = error.response?.data.message ?? 'Something Went Wrong!';
+                    this.message = Object.values(errors).flat().join(", ");
+                } else {
+                    this.message =
+                        error.response?.data.message ?? "Something Went Wrong!";
                 }
             }
 
             this.loading = false;
+        },
+
+        async fetchProducts(page = 1) {
+            try {
+                const response = await axios.get(
+                    `/admin/products/data?page=${page}`,
+                );
+                this.products = response.data.data.data;
+                this.currentPage = response.data.data.current_page;
+                this.lastPage = response.data.data.last_page;
+            } catch (error) {
+                this.showNotif("Failed to load products.", true);
+            }
         },
     };
 }

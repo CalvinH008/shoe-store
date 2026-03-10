@@ -17,13 +17,19 @@ class ProductController extends Controller
      */
 
     public function __construct(private ProductService $productService) {}
-    public function index(): JsonResponse
+    public function index()
+    {
+        return view('admin.products.index');
+    }
+
+    public function getData(): JsonResponse
     {
         $products = $this->productService->getAllForAdmin();
+
         return response()->json([
-            'status' => true,
-            'message' => 'Data produk berhasil diambil',
-            'data' => $products
+            'status'  => true,
+            'message' => 'Products retrieved successfully.',
+            'data'    => $products,
         ]);
     }
 
