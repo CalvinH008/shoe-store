@@ -96,7 +96,7 @@
 * 🗓️ WEEK 3 – ADVANCED & SCALABLE THINKING
 * Di sini kamu naik level
 * =========================
-* 📅 Hari 15–16: Pagination & Filtering
+* 📅 Hari 15–16: Pagination & Filtering ✅
 * Implement:
 * - Filter by category
 * - Search product
@@ -108,7 +108,7 @@
 * - Clean query
 * Contoh clean query:
 * Product::active()->byCategory($id)->search($q)
-* 📅 Hari 17–18: File Upload
+* 📅 Hari 17–18: File Upload ✅
 * Upload gambar
 * Simpan di storage
 * Tampilkan image
@@ -117,7 +117,7 @@
 * - Storage
 * - symbolic link
 * - Accessor image URL
-* 📅 Hari 19–20: Order System (Checkout)
+* 📅 Hari 19–20: Order System (Checkout) ✅
 * Buat:
 * - Order table
 * - Order items

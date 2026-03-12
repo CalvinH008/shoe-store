@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController as UserProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,14 @@ Route::prefix('cart')->name('cart.')->middleware('auth:web')->group(function () 
     Route::patch('/items/{cartItem}', [CartController::class, 'updateQuantity'])->name('update');
     Route::delete('/items/{cartItem}', [CartController::class, 'removeItem'])->name('remove');
     Route::delete('/', [CartController::class, 'clearCart'])->name('clear');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/checkout',            [OrderController::class, 'checkoutPage'])->name('checkout');
+    Route::post('/checkout',           [OrderController::class, 'checkout'])->name('checkout.process');
+    Route::get('/orders',              [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{id}/success', [OrderController::class, 'success'])->name('orders.success');
+    Route::get('/orders/{id}',         [OrderController::class, 'show'])->name('orders.show');
 });
 
 // route admin
