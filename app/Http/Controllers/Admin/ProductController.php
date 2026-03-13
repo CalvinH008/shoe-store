@@ -19,7 +19,7 @@ class ProductController extends Controller
     public function __construct(private ProductService $productService) {}
     public function index()
     {
-        return view('admin.products.index');
+        return view('admin.index');
     }
 
     public function getData(): JsonResponse
@@ -78,7 +78,7 @@ class ProductController extends Controller
         try {
             $data = $request->only('category_id', 'name', 'slug', 'price', 'stock', 'description', 'is_active');
             $images = $request->file('images') ?? [];
-            $primaryImage = $request->primary_image;
+            $primaryImage = $request->primary_image ?? '';
             $removedImages = $request->input('removed_images', []);
 
             $product = $this->productService->update($product, $data, $primaryImage, $removedImages, $images);
@@ -96,6 +96,11 @@ class ProductController extends Controller
                 'data' => null
             ]);
         }
+    }
+
+    public function edit(Product $product){
+        $categories = Category::all();
+        return view('admin.products.edit', compact('product', 'categories'));
     }
 
     /**

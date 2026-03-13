@@ -79,6 +79,12 @@ class ProductService
                 if (str_starts_with($primaryImage, 'existing-')) {
                     $imageId = str_replace('existing-', '', $primaryImage);
                     $product->images()->where('id', $imageId)->update(['is_primary' => true]);
+                } elseif (str_starts_with($primaryImage, 'new-')) {
+                    $newIndex = (int) str_replace('new-', '', $primaryImage);
+                    $newImages = $product->images()->orderBy('sort_order', 'desc')->take(count($images))->get()->reverse()->values();
+                    if (isset($newImages[$newIndex])) {
+                        $newImages[$newIndex]->update(['is_primary' => true]);
+                    }
                 }
             }
             return $product;
