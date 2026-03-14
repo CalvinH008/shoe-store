@@ -41,7 +41,6 @@ class OrderController extends Controller
                 'data' => null
             ], 422);
         } catch (\Exception $error) {
-            \Log::error('Checkout error: ' . $error->getMessage());
             return response()->json([
                 'status' => false,
                 'message' => 'Checkout Failed',

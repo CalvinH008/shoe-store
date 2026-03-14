@@ -33,7 +33,6 @@
 * - Foreign key
 * - onDelete cascade
 * - Eloquent relationship
-* ⚠️ STOP kalau relasi belum paham
 * 📅 Hari 5–6: CRUD Product (Tanpa UI Ribet) ✅
 * Buat:
 * - Create product

@@ -19,7 +19,7 @@ class ProductController extends Controller
     public function __construct(private ProductService $productService) {}
     public function index()
     {
-        return view('admin.index');
+        return view('admin.products.index');
     }
 
     public function getData(): JsonResponse
@@ -98,7 +98,7 @@ class ProductController extends Controller
         }
     }
 
-    public function edit(Product $product){
+    public function edit(Product $product): \Illuminate\View\View{
         $categories = Category::all();
         return view('admin.products.edit', compact('product', 'categories'));
     }
