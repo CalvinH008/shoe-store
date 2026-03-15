@@ -106,17 +106,25 @@ class CartController extends Controller
     {
         try {
             $cart = $this->cartService->clearCart(auth()->id());
+            if (!$cart) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Cart Not Found',
+                    'data' => $cart
+                ], 404);
+            }
+
             return response()->json([
-                'status' => false,
-                'message' => 'Cart Not Found',
+                'status' => true,
+                'message' => 'Cart Cleared Successfully',
                 'data' => $cart
             ]);
         } catch (\Exception $error) {
             return response()->json([
-                'status' => true,
+                'status' => false,
                 'message' => $error->getMessage(),
                 'data' => null
-            ]);
+            ], 500);
         }
     }
 }

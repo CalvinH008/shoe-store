@@ -134,7 +134,7 @@
 * 🗓️ WEEK 4 – API MINDSET & UI POLISH
 * Backend solid, baru sentuh UI
 * =========================
-* 📅 Hari 22–23: Standardisasi API
+* 📅 Hari 22–23: Standardisasi API ✅ 
 * Buat:
 * - API endpoint product
 * - API endpoint cart

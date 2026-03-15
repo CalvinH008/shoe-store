@@ -4,12 +4,12 @@
 
 @section('content')
 
-<nav>
-    <form action=" {{route('logout')}} " method="POST">
-        @csrf
-        <button type="submit">Logout</button>
-    </form>
-</nav>
+    <nav>
+        <form action=" {{ route('logout') }} " method="POST">
+            @csrf
+            <button type="submit">Logout</button>
+        </form>
+    </nav>
     {{-- form filter dan sort --}}
     <form method="GET" action="{{ route('products.index') }}">
 
@@ -46,9 +46,11 @@
                 <p>{{ number_format($product->price, 0, ',', '.') }}</p>
                 <p>Stock: {{ $product->stock }}</p>
 
-                <button class="btn-add-cart" data-product-id="{{ $product->id }}"
-                    data-product-name="{{ $product->name }}">
-                    Add To Cart
+                <button type="button" x-data="{ loading: false }"
+                    @click="loading = true; addToCart({{ $product->id }}, 1).finally(() => loading = false)"
+                    :disabled="loading">
+                    <span x-show="!loading">Add To Cart</span>
+                    <span x-show="loading">Adding...</span>
                 </button>
             </div>
         @empty
@@ -62,28 +64,4 @@
 @endsection
 
 @push('scripts')
-    <script>
-        // ambil semua tombol add to cart
-        const buttons = document.querySelectorAll('.btn-add-cart');
-
-        // berikan event listener tiap button
-        buttons.forEach(function(button) {
-            button.addEventListener('click', async function() {
-                // ambil product id dari attribute data-product-id
-                const productId = this.getAttribute('data-product-id');
-
-                console.log('tombol diklik, productId:', productId);
-                // disable tombol saat proses agar tidak terjadi double click
-                this.disabled = true;
-                this.textContent = 'Adding...';
-
-                // panggil fungsi addToCart dari cart.js
-                await addToCart(productId, 1);
-
-                // enable kembali setelah selesai
-                this.disabled = false;
-                this.textContent = 'Add To Cart';
-            });
-        });
-    </script>
 @endpush
