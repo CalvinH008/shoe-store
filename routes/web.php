@@ -8,7 +8,13 @@ use App\Http\Controllers\ProductController as UserProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    $featuredProducts = \App\Models\Product::with('primaryImage')
+        ->where('is_active', true)
+        ->whereHas('primaryImage')
+        ->latest()
+        ->take(8)
+        ->get();
+    return view('welcome', compact('featuredProducts'));
 });
 
 // guest route untuk yang belum login
