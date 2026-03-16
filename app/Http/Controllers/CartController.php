@@ -6,11 +6,22 @@ use App\Http\Requests\AddItemRequest;
 use App\Http\Requests\UpdateQuantityRequest;
 use App\Services\CartService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 class CartController extends Controller
 {
     public function __construct(private CartService $cartService) {}
 
+    public function cartPage(): View{
+        try{
+            $userId = auth()->id();
+            $cart = $this->cartService->getCart($userId);
+            return view('cart.index', compact('cart'));
+        }catch(\Exception $error){
+            $cart = null;
+            return view('cart.index', compact('cart'));
+        }
+    }
 
     public function getCart(): JsonResponse
     {

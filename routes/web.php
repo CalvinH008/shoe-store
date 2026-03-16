@@ -31,8 +31,12 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 // route product untuk user
 Route::get('/products', [UserProductController::class, 'index'])->name('products.index');
 
+// route view cart 
+Route::get('/cart', [CartController::class, 'cartPage'])->name('cart.page')->middleware('auth');
+
+// API cart
 Route::prefix('cart')->name('cart.')->middleware('auth:web')->group(function () {
-    Route::get('/', [CartController::class, 'getCart'])->name('get');
+    Route::get('/data', [CartController::class, 'getCart'])->name('get');
     Route::post('/add', [CartController::class, 'addItem'])->name('add');
     Route::patch('/items/{cartItem}', [CartController::class, 'updateQuantity'])->name('update');
     Route::delete('/items/{cartItem}', [CartController::class, 'removeItem'])->name('remove');
