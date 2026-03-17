@@ -178,3 +178,6 @@
 * - Tidak ada duplicate logic
 * - Naming konsisten
 * - Folder structure clean
+
+
+fix bug adding, fix layout cart, fix layout checkout, buat admin dashboard, buat sidebar dengan folder dan file terpisah, buat expand card menu di add product admin dashboard: checkout: success

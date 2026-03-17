@@ -51,14 +51,14 @@
     </style>
 </head>
 
-<body class="bg-white overflow-x-hidden">
+<body class="bg-white flex flex-col min-h-screen overflow-x-hidden">
     @include('partials.navbar')
-    <main class="pt-20">
+    <main class="pt-20 flex-1">
         @yield('content')
     </main>
     @include('partials.footer')
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="{{ asset('js/cart.js') }}"></script>
+    <script src="/js/store/cart.js"></script>
     @stack('scripts')
 </body>
 

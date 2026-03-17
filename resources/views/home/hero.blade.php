@@ -12,7 +12,7 @@
                 <div
                     class="inline-flex items-center gap-2 bg-blue-400/20 border border-blue-400/30 text-blue-300 text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-6">
                     <span class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
-                    New Arrivals 2025
+                    New Arrivals 2026
                 </div>
 
                 <h1 class="font-display font-900 text-7xl leading-none uppercase mb-6">

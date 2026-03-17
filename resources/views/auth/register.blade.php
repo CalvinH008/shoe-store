@@ -1,7 +1,14 @@
-@extends('layouts.app')
-@section('title', 'register')
-@section('content')
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up</title>
+</head>
+
+<body>
     <h2>Sign Up</h2>
     {{-- tampilkan error --}}
     @if ($errors->has('error'))
@@ -42,6 +49,8 @@
         </div>
 
         <button type="submit">Sign Up</button>
-        <a href=" {{ route('login') }} ">Already have an account? Sign up.</a>
+        <a href=" {{ route('login') }} ">Already have an account? Sign In.</a>
     </form>
-@endsection
+</body>
+
+</html>

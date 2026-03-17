@@ -12,12 +12,13 @@ class CartController extends Controller
 {
     public function __construct(private CartService $cartService) {}
 
-    public function cartPage(): View{
-        try{
+    public function cartPage(): View
+    {
+        try {
             $userId = auth()->id();
             $cart = $this->cartService->getCart($userId);
             return view('cart.index', compact('cart'));
-        }catch(\Exception $error){
+        } catch (\Exception $error) {
             $cart = null;
             return view('cart.index', compact('cart'));
         }
@@ -129,7 +130,7 @@ class CartController extends Controller
         try {
             $cart = $this->cartService->clearCart(auth()->id());
 
-            if(!$cart){
+            if (!$cart) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Cart Not Found',

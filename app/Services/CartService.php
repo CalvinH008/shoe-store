@@ -115,7 +115,7 @@ class CartService
                 'status' => 'active'
             ])->first();
 
-            if(!$cart){
+            if (!$cart) {
                 return null;
             }
 

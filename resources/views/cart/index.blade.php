@@ -2,7 +2,7 @@
 @section('title', 'My Cart')
 @section('content')
 
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-6xl mx-auto min-h-[70vh] px-4">
         <h1 class="text-2xl font-bold mb-6">My Cart</h1>
 
         @if (!$cart || $cart->items->isEmpty())
