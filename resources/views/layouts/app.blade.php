@@ -53,7 +53,7 @@
 
 <body class="bg-white flex flex-col min-h-screen overflow-x-hidden">
     @include('partials.navbar')
-    <main class="pt-20 flex-1">
+    <main class="flex-1">
         @yield('content')
     </main>
     @include('partials.footer')

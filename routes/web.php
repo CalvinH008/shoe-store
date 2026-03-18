@@ -43,6 +43,7 @@ Route::prefix('cart')->name('cart.')->middleware('auth:web')->group(function () 
     Route::delete('/', [CartController::class, 'clearCart'])->name('clear');
 });
 
+
 Route::middleware('auth')->group(function () {
     Route::get('/checkout',            [OrderController::class, 'checkoutPage'])->name('checkout');
     Route::post('/checkout',           [OrderController::class, 'checkout'])->name('checkout.process');

@@ -32,6 +32,10 @@
                 {{-- Jembatan invisible agar dropdown tidak hilang saat cursor bergerak --}}
                 <div class="absolute top-full left-1/2 -translate-x-1/2 pt-2 hidden group-hover:block w-52">
                     <div class="bg-white text-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+                        <a href="{{ route('products.index') }}"
+                            class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 text-sm transition border-b border-gray-100">
+                            <span>🛍️</span> All Products
+                        </a>
                         <a href="{{ route('products.index') }}?category=1"
                             class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 text-sm transition border-b border-gray-50">
                             <span>🏃</span> Running Shoes
@@ -55,9 +59,9 @@
                     </div>
                 </div>
             </div>
-            <a href="{{ route('products.index') }}"
+            <a href="#"
                 class="text-sm text-white hover:text-gray-200 transition px-5 py-1.5 rounded-full hover:bg-white/10">
-                SHOP
+                CONTACT US
             </a>
             <a href="#faq"
                 class="text-sm text-white hover:text-gray-200 transition px-5 py-1.5 rounded-full hover:bg-white/10">
@@ -78,10 +82,6 @@
                 <a href="{{ route('cart.page') }}"
                     class="relative text-white hover:text-gray-200 transition px-3 py-1.5 rounded-full hover:bg-white/10 flex items-center">
                     <span class="text-lg">🛒</span>
-                    <span id="cart-count"
-                        class="absolute -top-1 -right-1 bg-orange-400 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                        0
-                    </span>
                 </a>
 
                 {{-- User Dropdown --}}

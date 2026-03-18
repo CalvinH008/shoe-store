@@ -2,17 +2,29 @@
 @section('title', 'My Cart')
 @section('content')
 
-    <div class="max-w-6xl mx-auto min-h-[70vh] px-4">
+    <div class="max-w-7xl mx-auto px-6 pt-24 pb-10 min-h-[70vh]">
         <h1 class="text-2xl font-bold mb-6">My Cart</h1>
 
         @if (!$cart || $cart->items->isEmpty())
-            <div class="bg-white rounded-2xl p-16 text-center shadow-sm">
-                <p class="text-5xl mb-4">🛒</p>
-                <p class="text-slate-500 mb-6">Your cart is empty.</p>
-                <a href="{{ route('products.index') }}"
-                    class="bg-[#1e3a5f] text-white font-bold px-8 py-3 rounded-full hover:bg-[#162d4a] transition">
-                    Shop Now
-                </a>
+            <div class="flex items-center justify-center h-full">
+                <div class="bg-white rounded-2xl px-16 py-14 text-center shadow-sm w-full max-w-3xl border border-slate-100">
+
+                    <div class="text-6xl mb-6">🛒</div>
+
+                    <h2 class="text-2xl font-bold text-slate-800 mb-3">
+                        Your cart is empty
+                    </h2>
+
+                    <p class="text-slate-500 mb-8">
+                        Looks like you haven't added anything yet.
+                    </p>
+
+                    <a href="{{ route('products.index') }}"
+                        class="inline-block bg-[#1e3a5f] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#162d4a] transition">
+                        Start Shopping
+                    </a>
+
+                </div>
             </div>
         @else
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -93,10 +105,10 @@
                                 <span class="text-[#1e3a5f]">Rp {{ number_format($cart->total, 0, ',', '.') }}</span>
                             </div>
                         </div>
-                        <a href="{{ route('checkout') }}"
-                            class="mt-6 block text-center bg-[#1e3a5f] text-white font-bold py-3 rounded-xl hover:bg-[#162d4a] transition">
+                        <button onclick="openCheckoutModal()"
+                            class="mt-6 w-full bg-[#1e3a5f] text-white font-bold py-3 rounded-xl hover:bg-[#162d4a] transition">
                             Checkout →
-                        </a>
+                        </button>
                         <a href="{{ route('products.index') }}"
                             class="mt-3 block text-center text-slate-400 text-sm hover:text-slate-600 transition">
                             ← Continue Shopping
@@ -107,7 +119,7 @@
             </div>
         @endif
     </div>
-
+    @include('checkout.index')
 @endsection
 @push('scripts')
     <script>
@@ -136,6 +148,16 @@
             } catch (error) {
                 alert('Failed to remove item');
             }
+        }
+
+        function openCheckoutModal() {
+            document.getElementById('checkoutModal').classList.remove('hidden');
+            document.getElementById('checkoutModal').classList.add('flex');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkoutModal').classList.add('hidden');
+            document.getElementById('checkoutModal').classList.remove('flex');
         }
     </script>
 @endpush

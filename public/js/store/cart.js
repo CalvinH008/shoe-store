@@ -14,12 +14,20 @@ axios.defaults.headers.common["Content-Type"] = "application/json";
 async function getCart() {
     try {
         const response = await axios.get("/cart");
+
+        console.log("GET CART:", response.data);
+
+        if (!response.data || !response.data.data) return;
+
         const cart = response.data.data;
+
         updateCartCount(cart);
-        updateCartPreview(cart); // panggil biasa
+        updateCartPreview(cart);
+
         return cart;
     } catch (error) {
-        console.log("Gagal ambil cart:", error);
+        console.log("GET CART ERROR (IGNORE):", error);
+        // ❗ jangan pernah kasih notif di sini
     }
 }
 
@@ -33,15 +41,32 @@ async function addToCart(productId, quantity = 1) {
             quantity: quantity,
         });
 
-        showNotification(response.data.message, "success");
+        console.log("ADD RESPONSE:", response.data);
+
+        // VALIDASI DATA
+        if (!response.data || !response.data.data) {
+            throw new Error("Invalid response");
+        }
+
+        showNotification(
+            response.data.message || "Item added to cart",
+            "success",
+        );
+
+        // update UI
         updateCartCount(response.data.data);
         updateCartPreview(response.data.data);
+
         return response.data.data;
     } catch (error) {
-        if (error.response && error.response.status === 422) {
-            showNotification(error.response.data.message, "error");
-        } else {
-            showNotification("Failed to add item", "error");
+        console.error("ADD ERROR:", error);
+
+        // ❗ cuma tampilkan error kalau memang dari server
+        if (error.response) {
+            showNotification(
+                error.response.data.message || "Failed to add item",
+                "error",
+            );
         }
     }
 }
@@ -94,34 +119,35 @@ async function removeItem(cartItemId) {
 function updateCartPreview(cart) {
     const preview = document.getElementById("cart-preview");
 
+    if (!preview) return;
+
     if (!cart || !cart.items || !cart.items.length) {
         preview.innerHTML = "<p>Cart is empty.</p>";
         return;
     }
 
     let html = "";
+
     cart.items.forEach((item) => {
+        if (!item.product) return;
+
         html += `
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
             <span>${item.product.name}</span>
             <div style="display:flex;align-items:center;gap:4px">
-                <button onclick="updateQuantity(${item.id}, ${item.quantity - 1})" 
-                    style="padding:2px 6px">-</button>
+                <button onclick="updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
                 <span>${item.quantity}</span>
-                <button onclick="updateQuantity(${item.id}, ${item.quantity + 1})"
-                    style="padding:2px 6px">+</button>
-                <button onclick="removeItem(${item.id})"
-                    style="padding:2px 6px;color:red">✕</button>
+                <button onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                <button onclick="removeItem(${item.id})" style="color:red">✕</button>
             </div>
         </div>`;
     });
 
-    // total price di bawah
     html += `
     <hr>
     <div style="display:flex;justify-content:space-between;margin-top:8px">
         <strong>Total</strong>
-        <strong>Rp ${Number(cart.total).toLocaleString("id-ID")}</strong>
+        <strong>Rp ${Number(cart.total || 0).toLocaleString("id-ID")}</strong>
     </div>`;
 
     preview.innerHTML = html;

@@ -18,19 +18,20 @@ class CartItem extends Model
         'quantity' => 'integer', // quantity selalu int, bukan string
     ];
 
-    public function cart(){
+    public function cart()
+    {
         return $this->belongsTo(Cart::class);
     }
 
-    public function product(){
+    public function product()
+    {
         return $this->belongsTo(Product::class);
     }
 
     // access mutator
-    
-    public function getSubtotalAttribute(){
-        return $this->product->price * $this->quantity;
-    } 
 
+    public function getSubtotalAttribute()
+    {
+        return ($this->product?->price ?? 0) * $this->quantity;
+    }
 }
-    

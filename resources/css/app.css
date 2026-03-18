@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -6,6 +6,69 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans:
+        "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
+}
+.input-style {
+    @apply w-full border border-slate-200 rounded-xl p-3 outline-none transition
+    focus:border-[#1e3a5f] focus:ring-2 focus:ring-[#1e3a5f]/20;
+}
+
+.payment-card {
+    @apply border border-slate-200 rounded-xl cursor-pointer transition 
+    hover:border-[#1e3a5f] hover:bg-slate-50;
+}
+
+.payment-card:has(input:checked) {
+    @apply border-[#1e3a5f] bg-[#1e3a5f]/5 shadow-sm;
+}
+
+.payment-card input:checked + svg {
+    @apply text-[#1e3a5f];
+}
+
+.payment-card input:checked ~ span {
+    @apply text-[#1e3a5f] font-semibold;
+}
+
+.payment-row {
+    @apply flex items-center w-full border border-slate-200 rounded-lg px-3 py-2.5 cursor-pointer transition;
+}
+
+.payment-row:hover {
+    @apply border-[#1e3a5f] bg-slate-50;
+}
+
+.payment-row:has(input:checked) {
+    @apply border-[#1e3a5f] bg-[#1e3a5f]/5;
+}
+
+/* ICON KECILIN */
+.icon-box {
+    @apply w-8 h-8 flex items-center justify-center rounded-md bg-slate-100 text-base;
+}
+
+/* TEXT */
+.payment-row p:first-child {
+    @apply text-sm;
+}
+
+.payment-row p:last-child {
+    @apply text-[11px];
+}
+
+/* RADIO */
+.radio-indicator {
+    @apply w-4 h-4 rounded-full border-2 border-slate-300 flex items-center justify-center;
+}
+
+.payment-row:has(input:checked) .radio-indicator {
+    @apply border-[#1e3a5f];
+}
+
+.payment-row:has(input:checked) .radio-indicator::after {
+    content: "";
+    @apply w-2 h-2 bg-[#1e3a5f] rounded-full;
 }

@@ -31,7 +31,7 @@ class Cart extends Model
     public function getTotalAttribute()
     {
         return $this->items->sum(function ($item) {
-            return $item->product->price * $item->quantity;
+            return ($item->product?->price ?? 0) * $item->quantity;
         });
     }
 
