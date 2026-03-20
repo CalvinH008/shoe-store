@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CheckoutRequest;
+use App\Models\Cart;
 use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,7 +16,11 @@ class OrderController extends Controller
     // halaman checkout form input alamat
     public function checkoutPage(): View
     {
-        return view('orders.checkout');
+        $cart = Cart::where('user_id', auth()->id())
+            ->where('status', 'active')
+            ->with('items.product.primaryImage')
+            ->first();
+        return view('checkout.index', compact('cart'));
     }
 
     public function checkout(CheckoutRequest $request): JsonResponse
@@ -23,7 +28,7 @@ class OrderController extends Controller
         try {
             $order = $this->orderService->checkout(
                 auth()->id(),
-                $request->validated('shipping_address')
+                $request->validated()
             );
 
             return response()->json([

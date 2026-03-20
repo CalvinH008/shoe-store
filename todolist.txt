@@ -179,4 +179,4 @@
 * - Naming konsisten
 * - Folder structure clean
 
-fix layout checkout, buat admin dashboard, buat sidebar dengan folder dan file terpisah, buat expand card menu di add product admin dashboard: checkout: success
+fix layout checkout, buat admin dashboard, buat sidebar dengan folder dan file terpisah, buat expand card menu di add product admin dashboard: checkout: success, fix bug checkout tidak masuk history, fix layout orders, fix tidak muncul success saat checkout

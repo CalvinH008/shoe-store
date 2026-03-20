@@ -8,22 +8,13 @@
         @if (!$cart || $cart->items->isEmpty())
             <div class="flex items-center justify-center h-full">
                 <div class="bg-white rounded-2xl px-16 py-14 text-center shadow-sm w-full max-w-3xl border border-slate-100">
-
                     <div class="text-6xl mb-6">🛒</div>
-
-                    <h2 class="text-2xl font-bold text-slate-800 mb-3">
-                        Your cart is empty
-                    </h2>
-
-                    <p class="text-slate-500 mb-8">
-                        Looks like you haven't added anything yet.
-                    </p>
-
+                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Your cart is empty</h2>
+                    <p class="text-slate-500 mb-8">Looks like you haven't added anything yet.</p>
                     <a href="{{ route('products.index') }}"
                         class="inline-block bg-[#1e3a5f] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#162d4a] transition">
                         Start Shopping
                     </a>
-
                 </div>
             </div>
         @else
@@ -34,7 +25,6 @@
                     @foreach ($cart->items as $item)
                         <div class="bg-white rounded-2xl p-4 shadow-sm flex items-center gap-4"
                             id="cart-item-{{ $item->id }}">
-                            {{-- Image --}}
                             <div
                                 class="w-24 h-24 bg-slate-100 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0">
                                 @if ($item->product->primaryImage)
@@ -44,45 +34,25 @@
                                     <span class="text-3xl">👟</span>
                                 @endif
                             </div>
-
-                            {{-- Info --}}
                             <div class="flex-1">
                                 <h3 class="font-bold text-sm">{{ $item->product->name }}</h3>
-                                <p class="text-[#1e3a5f] font-bold mt-1">
-                                    Rp {{ number_format($item->product->price, 0, ',', '.') }}
-                                </p>
-                                <p class="text-xs text-slate-400 mt-0.5">
-                                    Stock: {{ $item->product->stock }}
-                                </p>
+                                <p class="text-[#1e3a5f] font-bold mt-1">Rp
+                                    {{ number_format($item->product->price, 0, ',', '.') }}</p>
+                                <p class="text-xs text-slate-400 mt-0.5">Stock: {{ $item->product->stock }}</p>
                             </div>
-
-                            {{-- Quantity Controls --}}
                             <div class="flex items-center gap-2">
                                 <button onclick="updateQuantity({{ $item->id }}, {{ $item->quantity - 1 }})"
-                                    class="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center font-bold text-slate-600 hover:bg-slate-200 transition">
-                                    −
-                                </button>
-                                <span class="w-8 text-center font-bold text-sm" id="qty-{{ $item->id }}">
-                                    {{ $item->quantity }}
-                                </span>
+                                    class="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center font-bold text-slate-600 hover:bg-slate-200 transition">−</button>
+                                <span class="w-8 text-center font-bold text-sm">{{ $item->quantity }}</span>
                                 <button onclick="updateQuantity({{ $item->id }}, {{ $item->quantity + 1 }})"
-                                    class="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center font-bold text-slate-600 hover:bg-slate-200 transition">
-                                    +
-                                </button>
+                                    class="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center font-bold text-slate-600 hover:bg-slate-200 transition">+</button>
                             </div>
-
-                            {{-- Subtotal --}}
                             <div class="text-right min-w-[100px]">
-                                <p class="font-bold text-[#1e3a5f]">
-                                    Rp {{ number_format($item->product->price * $item->quantity, 0, ',', '.') }}
-                                </p>
+                                <p class="font-bold text-[#1e3a5f]">Rp
+                                    {{ number_format($item->product->price * $item->quantity, 0, ',', '.') }}</p>
                             </div>
-
-                            {{-- Remove --}}
                             <button onclick="removeItem({{ $item->id }})"
-                                class="text-slate-300 hover:text-red-500 transition text-lg ml-2">
-                                ✕
-                            </button>
+                                class="text-slate-300 hover:text-red-500 transition text-lg ml-2">✕</button>
                         </div>
                     @endforeach
                 </div>
@@ -93,8 +63,8 @@
                         <h2 class="font-bold text-lg mb-4">Order Summary</h2>
                         <div class="space-y-3 text-sm">
                             <div class="flex justify-between text-slate-500">
-                                <span>Items ({{ $cart->total_items }})</span>
-                                <span>Rp {{ number_format($cart->total, 0, ',', '.') }}</span>
+                                <span>Items ({{ $totalItems }})</span>
+                                <span>Rp {{ number_format($total, 0, ',', '.') }}</span>
                             </div>
                             <div class="flex justify-between text-slate-500">
                                 <span>Shipping</span>
@@ -102,7 +72,7 @@
                             </div>
                             <div class="border-t border-slate-100 pt-3 flex justify-between font-bold text-base">
                                 <span>Total</span>
-                                <span class="text-[#1e3a5f]">Rp {{ number_format($cart->total, 0, ',', '.') }}</span>
+                                <span class="text-[#1e3a5f]">Rp {{ number_format($total, 0, ',', '.') }}</span>
                             </div>
                         </div>
                         <button onclick="openCheckoutModal()"
@@ -119,21 +89,20 @@
             </div>
         @endif
     </div>
+
     @include('checkout.index')
+
 @endsection
+
 @push('scripts')
     <script>
         async function updateQuantity(cartItemId, quantity) {
-            if (quantity < 1) {
-                return removeItem(cartItemId);
-            }
+            if (quantity < 1) return removeItem(cartItemId);
             try {
-                const response = await axios.patch(`/cart/items/${cartItemId}`, {
+                const response = await window.axios.patch(`/cart/items/${cartItemId}`, {
                     quantity
                 });
-                if (response.data.status) {
-                    window.location.reload();
-                }
+                if (response.data.status) window.location.reload();
             } catch (error) {
                 alert(error.response?.data?.message || 'Failed to update quantity');
             }
@@ -141,10 +110,8 @@
 
         async function removeItem(cartItemId) {
             try {
-                const response = await axios.delete(`/cart/items/${cartItemId}`);
-                if (response.data.status) {
-                    window.location.reload();
-                }
+                const response = await window.axios.delete(`/cart/items/${cartItemId}`);
+                if (response.data.status) window.location.reload();
             } catch (error) {
                 alert('Failed to remove item');
             }
@@ -158,6 +125,41 @@
         function closeCheckoutModal() {
             document.getElementById('checkoutModal').classList.add('hidden');
             document.getElementById('checkoutModal').classList.remove('flex');
+        }
+
+        async function submitCheckout(event) {
+            event.preventDefault();
+            const form = document.getElementById('checkoutForm');
+            const btn = document.getElementById('placeOrderBtn');
+            const msgEl = document.getElementById('checkoutMsg');
+
+            btn.disabled = true;
+            btn.textContent = 'Processing...';
+            msgEl.textContent = '';
+
+            const data = {
+                name: form.name.value,
+                phone: form.phone.value,
+                shipping_address: form.address.value,
+                payment_method: form.payment_method.value,
+                notes: form.notes.value,
+            };
+
+            try {
+                const response = await window.axios.post('/checkout', data);
+                if (response.data.status) {
+                    window.location.href = response.data.data.redirect;
+                }
+            } catch (error) {
+                if (error.response?.status === 422) {
+                    const errors = error.response.data.errors;
+                    msgEl.textContent = errors ? Object.values(errors).flat().join(', ') : error.response.data.message;
+                } else {
+                    msgEl.textContent = error.response?.data?.message ?? 'Checkout failed.';
+                }
+                btn.disabled = false;
+                btn.textContent = 'Place Order';
+            }
         }
     </script>
 @endpush

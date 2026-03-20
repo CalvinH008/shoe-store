@@ -15,12 +15,15 @@ class CartController extends Controller
     public function cartPage(): View
     {
         try {
-            $userId = auth()->id();
-            $cart = $this->cartService->getCart($userId);
-            return view('cart.index', compact('cart'));
+            $cart = $this->cartService->getCart(auth()->id());
+            $total = $cart->items->sum(fn($item) => $item->product->price * $item->quantity);
+            $totalItems = $cart->items->sum('quantity');
+            return view('cart.index', compact('cart', 'total', 'totalItems'));
         } catch (\Exception $error) {
             $cart = null;
-            return view('cart.index', compact('cart'));
+            $total = 0;
+            $totalItems = 0;
+            return view('cart.index', compact('cart', 'total', 'totalItems'));
         }
     }
 

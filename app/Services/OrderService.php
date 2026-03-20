@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
-    public function checkout(int $userId, string $shippingAddress): Order
+    public function checkout(int $userId, array $data): Order
     {
-        return DB::transaction(function () use ($userId, $shippingAddress) {
+        return DB::transaction(function () use ($userId, $data) {
             // ambil cart user dan itemsnya
             $cart = Cart::where('user_id', $userId)
                 ->where('status', 'active')
@@ -35,9 +35,13 @@ class OrderService
             // buat order
             $order = Order::create([
                 'user_id' => $userId,
+                'name' => $data['name'] ?? 'No Name',
+                'phone' => $data['phone'] ?? '000000000000',
+                'payment_method' => $data['payment_method'] ?? 'cod',
+                'notes' => $data['notes'] ?? null,
                 'status' => 'pending',
                 'total_price' => $totalPrice,
-                'shipping_address' => $shippingAddress
+                'shipping_address' => $data['shipping_address'] ?? null
             ]);
 
             // buat order item dan kurangi stok
@@ -52,6 +56,7 @@ class OrderService
                 $item->product->decrement('stock', $item->quantity);
             }
 
+            $cart->items()->delete();
             // tandai cart sebagai completed
             $cart->update(['status' => 'converted']);
 
