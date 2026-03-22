@@ -43,12 +43,12 @@ Route::prefix('cart')->name('cart.')->middleware('auth:web')->group(function () 
     Route::delete('/', [CartController::class, 'clearCart'])->name('clear');
 });
 
-
 Route::middleware('auth')->group(function () {
     Route::get('/checkout', [OrderController::class, 'checkoutPage'])->name('checkout');
     Route::post('/checkout',           [OrderController::class, 'checkout'])->name('checkout.process');
     Route::get('/orders',              [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}/success', [OrderController::class, 'success'])->name('orders.success');
+    Route::get('/orders/{id}/modal', [OrderController::class, 'showModal'])->name('orders.modal');
     Route::get('/orders/{id}',         [OrderController::class, 'show'])->name('orders.show');
 });
 

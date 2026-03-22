@@ -20,7 +20,16 @@ class OrderController extends Controller
             ->where('status', 'active')
             ->with('items.product.primaryImage')
             ->first();
-        return view('checkout.index', compact('cart'));
+
+        $total = 0;
+
+        if ($cart && $cart->items) {
+            foreach ($cart->items as $item) {
+                $total += $item->product->price * $item->quantity;
+            }
+        }
+
+        return view('checkout.index', compact('cart', 'total'));
     }
 
     public function checkout(CheckoutRequest $request): JsonResponse
@@ -31,12 +40,31 @@ class OrderController extends Controller
                 $request->validated()
             );
 
+            $items = $order->items->map(function ($item) {
+                return [
+                    'name' => $item->product->name,
+                    'qty' => $item->quantity,
+                    'subtotal' => number_format($item->subtotal, 0, ',', '.'),
+                    'image' => $item->product->primaryImage?->url ?? null
+                ];
+            });
+
             return response()->json([
                 'status' => true,
                 'message' => 'Order Placed Successfully',
                 'data'    => [
                     'order_id'   => $order->id,
                     'redirect'   => route('orders.success', $order->id),
+                    'created_at' => $order->created_at->format('d M Y H:i'),
+                    'total'      => number_format($order->total_price, 0, ',', '.'),
+                    'address'    => $order->shipping_address,
+                    'items'      => $order->items->map(function ($item) {
+                        return [
+                            'name' => $item->product->name,
+                            'qty'  => $item->quantity,
+                            'subtotal' => number_format($item->subtotal, 0, ',', '.'),
+                        ];
+                    }),
                 ],
             ]);
         } catch (\InvalidArgumentException $error) {
@@ -48,7 +76,7 @@ class OrderController extends Controller
         } catch (\Exception $error) {
             return response()->json([
                 'status' => false,
-                'message' => 'Checkout Failed',
+                'message' => $error->getMessage(),
                 'data' => null
             ], 500);
         }
@@ -72,5 +100,12 @@ class OrderController extends Controller
     {
         $order = $this->orderService->getOrderDetail($id, auth()->id());
         return view('orders.success', compact('order'));
+    }
+
+    public function showModal(int $id): View
+    {
+        $order = $this->orderService->getOrderDetail($id, auth()->id());
+
+        return view('orders.modal', compact('order'));
     }
 }

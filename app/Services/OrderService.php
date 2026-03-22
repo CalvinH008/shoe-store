@@ -60,13 +60,13 @@ class OrderService
             // tandai cart sebagai completed
             $cart->update(['status' => 'converted']);
 
-            return $order->load('items.product');
+            return $order->load('items.product.primaryImage');
         });
     }
 
     public function getUserOrders(int $userId): LengthAwarePaginator{
         return Order::where('user_id', $userId)
-                    ->with('items.product')
+                    ->with('items.product.primaryImage')
                     ->latest()
                     ->paginate(10);
     }
@@ -74,7 +74,7 @@ class OrderService
     public function getOrderDetail(int $orderId, int $userId ): Order{
         return Order::where('id', $orderId)
                     ->where('user_id', $userId)
-                    ->with('items.product')
+                    ->with('items.product.primaryImage')
                     ->firstOrFail();
     }
 }
