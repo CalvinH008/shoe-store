@@ -95,6 +95,9 @@
     @vite(['resources/js/app.js'])
     <script src="/js/store/cart.js"></script>
     <script src="{{ asset('js/admin/product.js') }}"></script>
+    <script>
+        window.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    </script>
     <script src="{{ asset('js/admin/orders.js') }}"></script>
     <script src="{{ asset('js/admin/users.js') }}"></script>
     @stack('scripts')

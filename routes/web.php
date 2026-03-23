@@ -74,8 +74,10 @@ Route::prefix('admin')->name('admin.')->middleware('isAdmin')->group(function ()
     // ================= ORDERS =================
     Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::get('orders/data', [AdminOrderController::class, 'getData'])->name('orders.data');
+    Route::patch('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.update-status');
 
     // ================= USERS =================
     Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
     Route::get('users/data', [AdminUserController::class, 'getData'])->name('users.data');
+    Route::delete('users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
 });

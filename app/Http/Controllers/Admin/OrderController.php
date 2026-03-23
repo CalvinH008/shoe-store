@@ -23,4 +23,19 @@ class OrderController extends Controller
             'data' => $orders
         ]);
     }
+    public function updateStatus(Request $request, Order $order): JsonResponse
+    {
+        $request->validate([
+            'status' => 'required|in:pending,paid,shipped,completed,cancelled',
+        ]);
+
+        $order->status = $request->status;
+        $order->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Order status updated successfully',
+            'order' => $order
+        ]);
+    }
 }
