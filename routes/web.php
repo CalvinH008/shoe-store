@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CartController;
@@ -54,6 +55,7 @@ Route::middleware('auth')->group(function () {
 
 // route admin
 Route::prefix('admin')->name('admin.')->middleware('isAdmin')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('products', [ProductController::class, 'index'])->name('products.index');
     Route::get('products/data', [ProductController::class, 'getData'])->name('products.data');
     Route::get('products/create', [ProductController::class, 'create'])->name('products.create');
@@ -62,4 +64,8 @@ Route::prefix('admin')->name('admin.')->middleware('isAdmin')->group(function ()
     Route::put('products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
     Route::patch('products/{product}/toggle-active', [ProductController::class, 'toggleActive'])->name('products.toggle-active');
+
+    // placeholder - nanti diisi controller proper
+    Route::get('orders', fn() => redirect()->route('admin.dashboard'))->name('orders.index');
+    Route::get('users', fn() => redirect()->route('admin.dashboard'))->name('users.index');
 });

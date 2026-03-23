@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('admin.layouts.app')
 
 @section('content')
     <div x-data="productManager()" x-init="fetchProducts()">
