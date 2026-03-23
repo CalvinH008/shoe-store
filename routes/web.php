@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController as UserProductController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -54,8 +56,12 @@ Route::middleware('auth')->group(function () {
 });
 
 // route admin
+// ================= ADMIN =================
 Route::prefix('admin')->name('admin.')->middleware('isAdmin')->group(function () {
+
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+    // ================= PRODUCTS =================
     Route::get('products', [ProductController::class, 'index'])->name('products.index');
     Route::get('products/data', [ProductController::class, 'getData'])->name('products.data');
     Route::get('products/create', [ProductController::class, 'create'])->name('products.create');
@@ -65,7 +71,11 @@ Route::prefix('admin')->name('admin.')->middleware('isAdmin')->group(function ()
     Route::delete('products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
     Route::patch('products/{product}/toggle-active', [ProductController::class, 'toggleActive'])->name('products.toggle-active');
 
-    // placeholder - nanti diisi controller proper
-    Route::get('orders', fn() => redirect()->route('admin.dashboard'))->name('orders.index');
-    Route::get('users', fn() => redirect()->route('admin.dashboard'))->name('users.index');
+    // ================= ORDERS =================
+    Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/data', [AdminOrderController::class, 'getData'])->name('orders.data');
+
+    // ================= USERS =================
+    Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::get('users/data', [AdminUserController::class, 'getData'])->name('users.data');
 });
