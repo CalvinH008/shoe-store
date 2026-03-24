@@ -10,111 +10,106 @@
 
         {{-- NOTIF --}}
         <div x-show="message" x-transition :class="isError ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-700'"
-            class="mb-4 px-4 py-2 rounded-lg text-sm">
+            class="mb-4 px-4 py-2 rounded-xl text-sm shadow-sm">
             <span x-text="message"></span>
         </div>
 
-        {{-- CARD --}}
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+        <div class="bg-white rounded-3xl shadow-md border border-slate-100 overflow-hidden">
 
             {{-- HEADER --}}
-            <h3 class="font-semibold text-slate-800 text-lg mb-6">All Users</h3>
+            <div class="flex justify-between items-center px-6 py-5 border-b bg-gradient-to-r from-slate-50 to-white">
+                <div>
+                    <h3 class="font-bold text-slate-800 text-lg">Users</h3>
+                    <p class="text-xs text-slate-400">Manage registered users</p>
+                </div>
+            </div>
 
-            {{-- TABLE --}}
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm">
+            {{-- LIST --}}
+            <div class="divide-y">
 
-                    <thead>
-                        <tr class="text-left text-xs uppercase text-slate-400 border-b">
-                            <th class="pb-3">User</th>
-                            <th>Joined</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
+                <template x-for="user in users" :key="user.id">
 
-                    <tbody class="divide-y">
+                    <div class="flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition">
 
-                        {{-- DATA --}}
-                        <template x-for="user in users" :key="user.id">
-                            <tr class="hover:bg-slate-50 transition">
+                        {{-- LEFT --}}
+                        <div class="flex items-center gap-4">
 
-                                {{-- USER --}}
-                                <td class="py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div
-                                            class="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-600">
-                                            <span x-text="user.name.charAt(0).toUpperCase()"></span>
-                                        </div>
-                                        <div>
-                                            <p class="font-medium text-slate-700" x-text="user.name"></p>
-                                            <p class="text-xs text-slate-400" x-text="user.email"></p>
-                                        </div>
-                                    </div>
-                                </td>
+                            {{-- AVATAR --}}
+                            <div
+                                class="w-11 h-11 rounded-full bg-[#1e3a5f]/10 flex items-center justify-center font-bold text-[#1e3a5f]">
+                                <span x-text="user.name.charAt(0).toUpperCase()"></span>
+                            </div>
 
-                                {{-- JOINED --}}
-                                <td class="py-4 text-slate-400 text-sm"
-                                    x-text="new Date(user.created_at).toLocaleDateString()">
-                                </td>
+                            {{-- INFO --}}
+                            <div>
+                                <p class="font-medium text-slate-800" x-text="user.name"></p>
+                                <p class="text-xs text-slate-400" x-text="user.email"></p>
+                                <p class="text-xs text-slate-400">
+                                    Joined:
+                                    <span x-text="new Date(user.created_at).toLocaleDateString()"></span>
+                                </p>
+                            </div>
 
-                                {{-- STATUS --}}
-                                <td class="py-4">
-                                    <span class="px-2 py-1 text-xs rounded-full"
-                                        :class="user.is_active ?
-                                            'bg-green-100 text-green-700' :
-                                            'bg-red-100 text-red-600'">
-                                        <span x-text="user.is_active ? 'Active' : 'Disabled'"></span>
-                                    </span>
-                                </td>
+                        </div>
 
-                                {{-- ACTION --}}
-                                <td class="py-4">
-                                    <button @click="toggleUser(user.id)"
-                                        class="px-3 py-1.5 text-xs rounded-lg border transition"
-                                        :class="user.is_active ?
-                                            'border-red-200 text-red-500 hover:bg-red-50' :
-                                            'border-green-200 text-green-600 hover:bg-green-50'">
+                        {{-- RIGHT --}}
+                        <div class="flex items-center gap-4">
 
-                                        <span x-text="user.is_active ? 'Disable' : 'Activate'"></span>
-                                    </button>
-                                </td>
+                            {{-- STATUS --}}
+                            <span class="px-3 py-1 text-xs font-medium rounded-full"
+                                :class="user.is_active ?
+                                    'bg-green-100 text-green-700' :
+                                    'bg-red-100 text-red-600'">
+                                <span x-text="user.is_active ? 'Active' : 'Disabled'"></span>
+                            </span>
 
-                            </tr>
-                        </template>
+                            {{-- ACTION --}}
+                            <button @click="toggleUser(user.id)"
+                                class="px-3 py-1.5 text-xs font-medium rounded-lg border transition"
+                                :class="user.is_active ?
+                                    'border-red-200 text-red-500 hover:bg-red-50' :
+                                    'border-green-200 text-green-600 hover:bg-green-50'">
 
-                        {{-- EMPTY --}}
-                        <template x-if="users.length === 0">
-                            <tr>
-                                <td colspan="4" class="text-center py-6 text-slate-400">
-                                    No users found
-                                </td>
-                            </tr>
-                        </template>
+                                <span x-text="user.is_active ? 'Disable' : 'Activate'"></span>
+                            </button>
 
-                    </tbody>
-                </table>
+                        </div>
+
+                    </div>
+
+                </template>
+
+                {{-- EMPTY --}}
+                <template x-if="users.length === 0">
+                    <div class="text-center py-10 text-slate-400 text-sm">
+                        No users found
+                    </div>
+                </template>
+
             </div>
 
             {{-- PAGINATION --}}
-            <div class="flex justify-end items-center mt-6 gap-2 text-sm">
+            <div class="flex justify-between items-center px-6 py-4 border-t">
 
-                <button @click="changePage(currentPage - 1)"
-                    class="px-3 py-1.5 rounded-lg border hover:bg-slate-50 disabled:opacity-50"
-                    :disabled="currentPage === 1">
-                    ←
-                </button>
+                <p class="text-sm text-slate-400">
+                    Page <span x-text="currentPage"></span> of <span x-text="lastPage"></span>
+                </p>
 
-                <span class="px-3 py-1 text-slate-600">
-                    <span x-text="currentPage"></span> /
-                    <span x-text="lastPage"></span>
-                </span>
+                <div class="flex gap-2">
 
-                <button @click="changePage(currentPage + 1)"
-                    class="px-3 py-1.5 rounded-lg border hover:bg-slate-50 disabled:opacity-50"
-                    :disabled="currentPage === lastPage">
-                    →
-                </button>
+                    <button @click="changePage(currentPage - 1)"
+                        class="px-3 py-1.5 rounded-lg border text-sm hover:bg-slate-100 disabled:opacity-50"
+                        :disabled="currentPage === 1">
+                        Prev
+                    </button>
+
+                    <button @click="changePage(currentPage + 1)"
+                        class="px-3 py-1.5 rounded-lg border text-sm hover:bg-slate-100 disabled:opacity-50"
+                        :disabled="currentPage === lastPage">
+                        Next
+                    </button>
+
+                </div>
 
             </div>
 
