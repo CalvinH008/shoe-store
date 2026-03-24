@@ -26,29 +26,69 @@
 
                     <thead>
                         <tr class="text-left text-xs uppercase text-slate-400 border-b">
-                            <th class="pb-3">Name</th>
-                            <th>Email</th>
+                            <th class="pb-3">User</th>
                             <th>Joined</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
 
                     <tbody class="divide-y">
 
+                        {{-- DATA --}}
                         <template x-for="user in users" :key="user.id">
                             <tr class="hover:bg-slate-50 transition">
 
-                                <td class="py-4 font-medium text-slate-700" x-text="user.name"></td>
-                                <td class="py-4 text-slate-500" x-text="user.email"></td>
-                                <td class="py-4 text-slate-400" x-text="new Date(user.created_at).toLocaleDateString()">
-                                </td>
+                                {{-- USER --}}
                                 <td class="py-4">
-                                    <button @click="deleteUser(user)"
-                                        class="text-red-600 px-2 py-1 border border-red-300 rounded-lg hover:bg-red-50">
-                                        Delete
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-600">
+                                            <span x-text="user.name.charAt(0).toUpperCase()"></span>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-slate-700" x-text="user.name"></p>
+                                            <p class="text-xs text-slate-400" x-text="user.email"></p>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                {{-- JOINED --}}
+                                <td class="py-4 text-slate-400 text-sm"
+                                    x-text="new Date(user.created_at).toLocaleDateString()">
+                                </td>
+
+                                {{-- STATUS --}}
+                                <td class="py-4">
+                                    <span class="px-2 py-1 text-xs rounded-full"
+                                        :class="user.is_active ?
+                                            'bg-green-100 text-green-700' :
+                                            'bg-red-100 text-red-600'">
+                                        <span x-text="user.is_active ? 'Active' : 'Disabled'"></span>
+                                    </span>
+                                </td>
+
+                                {{-- ACTION --}}
+                                <td class="py-4">
+                                    <button @click="toggleUser(user.id)"
+                                        class="px-3 py-1.5 text-xs rounded-lg border transition"
+                                        :class="user.is_active ?
+                                            'border-red-200 text-red-500 hover:bg-red-50' :
+                                            'border-green-200 text-green-600 hover:bg-green-50'">
+
+                                        <span x-text="user.is_active ? 'Disable' : 'Activate'"></span>
                                     </button>
                                 </td>
 
+                            </tr>
+                        </template>
+
+                        {{-- EMPTY --}}
+                        <template x-if="users.length === 0">
+                            <tr>
+                                <td colspan="4" class="text-center py-6 text-slate-400">
+                                    No users found
+                                </td>
                             </tr>
                         </template>
 
@@ -57,19 +97,25 @@
             </div>
 
             {{-- PAGINATION --}}
-            <div class="flex justify-end mt-6 gap-2">
-                <button @click="changePage(currentPage - 1)" class="px-3 py-1 border rounded-lg"
+            <div class="flex justify-end items-center mt-6 gap-2 text-sm">
+
+                <button @click="changePage(currentPage - 1)"
+                    class="px-3 py-1.5 rounded-lg border hover:bg-slate-50 disabled:opacity-50"
                     :disabled="currentPage === 1">
-                    Prev
+                    ←
                 </button>
 
-                <span class="px-3 py-1 text-sm text-slate-600" x-text="'Page ' + currentPage + ' / ' + lastPage">
+                <span class="px-3 py-1 text-slate-600">
+                    <span x-text="currentPage"></span> /
+                    <span x-text="lastPage"></span>
                 </span>
 
-                <button @click="changePage(currentPage + 1)" class="px-3 py-1 border rounded-lg"
+                <button @click="changePage(currentPage + 1)"
+                    class="px-3 py-1.5 rounded-lg border hover:bg-slate-50 disabled:opacity-50"
                     :disabled="currentPage === lastPage">
-                    Next
+                    →
                 </button>
+
             </div>
 
         </div>

@@ -178,10 +178,7 @@
 * - Tidak ada duplicate logic
 * - Naming konsisten
 * - Folder structure clean
-
-fix layout checkout, 
-buat admin dashboard, 
-buat sidebar dengan folder dan file terpisah, 
-buat expand card menu di add product admin dashboard: checkout: success, 
-fix bug order user product ga muncul, 
-improve layout admin dashboard
+ 
+tes management user
+tambahin field field yang ada di table db ke order management
+perbaiki desain user management dan order

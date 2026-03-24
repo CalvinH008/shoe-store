@@ -79,5 +79,5 @@ Route::prefix('admin')->name('admin.')->middleware('isAdmin')->group(function ()
     // ================= USERS =================
     Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
     Route::get('users/data', [AdminUserController::class, 'getData'])->name('users.data');
-    Route::delete('users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+    Route::patch('users/{user}/toggle-active', [AdminUserController::class, 'toggleActive']);
 });

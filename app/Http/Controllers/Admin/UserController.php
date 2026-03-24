@@ -23,14 +23,24 @@ class UserController extends Controller
             'data' => $users
         ]);
     }
-    
-    public function destroy(User $user): JsonResponse
+
+    public function toggleActive(User $user): JsonResponse
     {
-        $user->delete();
+        if ($user->id === auth()->id()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'You cannot disable your own account'
+            ], 400);
+        }
+
+        $user->update([
+            'is_active' => !$user->is_active
+        ]);
 
         return response()->json([
             'status' => true,
-            'message' => 'User deleted successfully'
+            'message' => $user->is_active ? 'User activated' : 'User disabled',
+            'data' => $user
         ]);
     }
 }
