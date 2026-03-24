@@ -16,7 +16,7 @@ class OrderController extends Controller
 
     public function getData(): JsonResponse
     {
-        $orders = Order::with('user')->latest()->paginate(10);
+        $orders = Order::with(['user', 'items.product'])->latest()->paginate(10);
 
         return response()->json([
             'status' => true,
