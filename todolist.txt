@@ -178,7 +178,3 @@
 * - Tidak ada duplicate logic
 * - Naming konsisten
 * - Folder structure clean
- 
-tes management user
-tambahin field field yang ada di table db ke order management
-perbaiki desain user management dan order

@@ -56,7 +56,6 @@ Route::middleware('auth')->group(function () {
 });
 
 // route admin
-// ================= ADMIN =================
 Route::prefix('admin')->name('admin.')->middleware('isAdmin')->group(function () {
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');

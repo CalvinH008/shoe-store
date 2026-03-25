@@ -4,53 +4,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Sign Up</title>
+
+    @vite(['resources/css/app.css'])
 </head>
 
-<body>
-    <h2>Sign Up</h2>
-    {{-- tampilkan error --}}
-    @if ($errors->has('error'))
-        <div style="color:red">
-            {{ $errors->first('error') }}
-        </div>
-    @endif
+<body class="bg-slate-100 flex items-center justify-center min-h-screen">
 
-    <form action=" {{ route('register') }} " method="POST">
-        @csrf
-        <div>
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" value=" {{ old('name') }} " required>
-            @error('name')
-                <span style="color: red;">{{ $message }}</span>
-            @enderror
-        </div>
+    <div class="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg border border-slate-200">
 
-        <div>
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" value=" {{ old('email') }} " required>
-            @error('email')
-                <span style="color:red"> {{ $message }} </span>
-            @enderror
-        </div>
+        <h2 class="text-2xl font-bold text-slate-800 mb-6 text-center">Sign Up</h2>
 
-        <div>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
-            @error('password')
-                <span style="color:red"> {{ $message }} </span>
-            @enderror
-        </div>
+        {{-- ERROR GLOBAL --}}
+        @if ($errors->has('error'))
+            <div class="mb-4 bg-red-100 text-red-600 px-4 py-2 rounded-lg text-sm">
+                {{ $errors->first('error') }}
+            </div>
+        @endif
 
-        <div>
-            <label for="password_confirmation">confirm Password</label>
-            <input type="password" id="password_confirmation" name="password_confirmation" required>
-        </div>
+        <form action="{{ route('register') }}" method="POST" class="space-y-5">
+            @csrf
 
-        <button type="submit">Sign Up</button>
-        <a href=" {{ route('login') }} ">Already have an account? Sign In.</a>
-    </form>
+            {{-- NAME --}}
+            <div>
+                <label class="text-sm text-slate-500">Name</label>
+                <input type="text" name="name" value="{{ old('name') }}" required
+                    class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1e3a5f] outline-none">
+
+                @error('name')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            {{-- EMAIL --}}
+            <div>
+                <label class="text-sm text-slate-500">Email</label>
+                <input type="email" name="email" value="{{ old('email') }}" required
+                    class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1e3a5f] outline-none">
+
+                @error('email')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            {{-- PASSWORD --}}
+            <div>
+                <label class="text-sm text-slate-500">Password</label>
+                <input type="password" name="password" required
+                    class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1e3a5f] outline-none">
+
+                @error('password')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            {{-- CONFIRM --}}
+            <div>
+                <label class="text-sm text-slate-500">Confirm Password</label>
+                <input type="password" name="password_confirmation" required
+                    class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1e3a5f] outline-none">
+            </div>
+
+            {{-- BUTTON --}}
+            <button type="submit"
+                class="w-full bg-[#1e3a5f] text-white py-2.5 rounded-lg font-medium hover:bg-[#162c47] transition">
+                Sign Up
+            </button>
+
+            {{-- LINK --}}
+            <p class="text-center text-sm text-slate-500">
+                Already have an account?
+                <a href="{{ route('login') }}" class="text-[#1e3a5f] font-medium hover:underline">
+                    Sign In
+                </a>
+            </p>
+
+        </form>
+
+    </div>
+
 </body>
 
 </html>
