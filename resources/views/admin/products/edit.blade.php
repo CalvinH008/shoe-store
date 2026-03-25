@@ -1,98 +1,147 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <h2>Edit Product</h2>
+    <div class="max-w-3xl mx-auto">
 
-    <div x-data="productEdit()">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
 
-        <form @submit.prevent="submitForm()" enctype="multipart/form-data">
-
-            <div>
-                <label>Category</label>
-                <select x-model="form.category_id">
-                    <option value="">Choose Category</option>
-                    @foreach ($categories as $category)
-                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                    @endforeach
-                </select>
+            {{-- TITLE --}}
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold text-slate-800">Edit Product</h2>
+                <p class="text-sm text-slate-400">Update product information</p>
             </div>
 
-            <div>
-                <label>Product Name</label>
-                <input type="text" x-model="form.name" @input="generateSlug()">
-            </div>
+            <div x-data="productEdit()">
 
-            <div>
-                <label>Slug</label>
-                <input type="text" x-model="form.slug">
-            </div>
+                <form @submit.prevent="submitForm()" enctype="multipart/form-data" class="space-y-5">
 
-            <div>
-                <label>Price</label>
-                <input type="number" x-model="form.price" min="0">
-            </div>
+                    <div class="grid md:grid-cols-2 gap-4">
 
-            <div>
-                <label>Stock</label>
-                <input type="number" x-model="form.stock" min="0">
-            </div>
-
-            <div>
-                <label>Description</label>
-                <textarea x-model="form.description"></textarea>
-            </div>
-
-            {{-- Gambar existing --}}
-            <div>
-                <label>Current Images</label>
-                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
-                    <template x-for="(image, index) in existingImages" :key="image.id">
-                        <div style="position:relative;">
-                            <img :src="image.url" style="width:100px; height:100px; object-fit:cover;">
-                            <div>
-                                <input type="radio" :value="'existing-' + image.id" x-model="form.primary_image"
-                                    :id="'existing-' + image.id">
-                                <label :for="'existing-' + image.id">Primary</label>
-                            </div>
-                            <button type="button" @click="removeExistingImage(image.id)" style="color:red;">Remove</button>
-                        </div>
-                    </template>
-                </div>
-            </div>
-
-            {{-- Upload gambar baru --}}
-            <div>
-                <label>Add New Images</label>
-                <input type="file" multiple accept="image/*" @change="handleImages($event)">
-            </div>
-
-            {{-- Preview gambar baru --}}
-            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
-                <template x-for="(preview, index) in previews" :key="index">
-                    <div style="position:relative;">
-                        <img :src="preview" style="width:100px; height:100px; object-fit:cover;">
                         <div>
-                            <input type="radio" :value="'new-' + index" x-model="form.primary_image"
-                                :id="'new-' + index">
-                            <label :for="'new-' + index">Primary</label>
+                            <label class="text-sm text-slate-500">Category</label>
+                            <select x-model="form.category_id"
+                                class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2">
+                                <option value="">Choose Category</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="text-sm text-slate-500">Product Name</label>
+                            <input type="text" x-model="form.name" @input="generateSlug()"
+                                class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2">
+                        </div>
+
+                        <div>
+                            <label class="text-sm text-slate-500">Slug</label>
+                            <input type="text" x-model="form.slug"
+                                class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 bg-slate-50">
+                        </div>
+
+                        <div>
+                            <label class="text-sm text-slate-500">Price</label>
+                            <input type="number" x-model="form.price" min="0"
+                                class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2">
+                        </div>
+
+                        <div>
+                            <label class="text-sm text-slate-500">Stock</label>
+                            <input type="number" x-model="form.stock" min="0"
+                                class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2">
+                        </div>
+
+                    </div>
+
+                    <div>
+                        <label class="text-sm text-slate-500">Description</label>
+                        <textarea x-model="form.description" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 min-h-[100px]"></textarea>
+                    </div>
+
+                    {{-- EXISTING IMAGES (TIDAK DIUBAH LOGIC) --}}
+                    <div>
+                        <label class="text-sm text-slate-500">Current Images</label>
+
+                        <div class="flex gap-3 flex-wrap mt-2">
+                            <template x-for="(image, index) in existingImages" :key="image.id">
+                                <div class="relative group">
+
+                                    <img :src="image.url" class="w-24 h-24 object-cover rounded-lg border shadow-sm">
+
+                                    <div class="mt-1">
+                                        <input type="radio" :value="'existing-' + image.id" x-model="form.primary_image"
+                                            :id="'existing-' + image.id">
+                                        <label :for="'existing-' + image.id" class="text-xs">Primary</label>
+                                    </div>
+
+                                    <button type="button" @click="removeExistingImage(image.id)"
+                                        class="text-red-500 text-xs mt-1">
+                                        Remove
+                                    </button>
+
+                                </div>
+                            </template>
                         </div>
                     </div>
-                </template>
+
+                    {{-- NEW IMAGE --}}
+                    <div>
+                        <label class="text-sm text-slate-500">Add New Images</label>
+
+                        <div
+                            class="mt-2 border-2 border-dashed border-slate-300 rounded-xl p-5 text-center cursor-pointer hover:bg-slate-50 transition">
+                            <input type="file" multiple accept="image/*" @change="handleImages($event)" class="hidden"
+                                x-ref="fileInput">
+
+                            <p class="text-sm text-slate-400">Click to upload images</p>
+
+                            <button type="button" @click="$refs.fileInput.click()"
+                                class="mt-2 text-xs text-[#1e3a5f] font-medium">
+                                Browse Files
+                            </button>
+                        </div>
+                    </div>
+
+                    {{-- PREVIEW --}}
+                    <div class="flex gap-3 flex-wrap">
+                        <template x-for="(preview, index) in previews" :key="index">
+                            <div class="relative">
+
+                                <img :src="preview" class="w-24 h-24 object-cover rounded-lg border shadow-sm">
+
+                                <div class="mt-1">
+                                    <input type="radio" :value="'new-' + index" x-model="form.primary_image"
+                                        :id="'new-' + index">
+                                    <label :for="'new-' + index" class="text-xs">Primary</label>
+                                </div>
+
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4 border-t">
+
+                        <label class="flex items-center gap-2 text-sm text-slate-600">
+                            <input type="checkbox" x-model="form.is_active">
+                            Produk Aktif
+                        </label>
+
+                        <button type="submit"
+                            class="bg-[#1e3a5f] text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-[#162c47]"
+                            :disabled="loading">
+                            <span x-text="loading ? 'Saving...' : 'Update Product'"></span>
+                        </button>
+
+                    </div>
+
+                    <div x-show="message" x-text="message" class="text-sm mt-2 text-green-600"></div>
+
+                </form>
+
             </div>
 
-            <div style="margin-top:10px;">
-                <label>
-                    <input type="checkbox" x-model="form.is_active"> Produk Aktif
-                </label>
-            </div>
-
-            <button type="submit" :disabled="loading">
-                <span x-text="loading ? 'Saving...' : 'Update Product'"></span>
-            </button>
-
-        </form>
-
-        <div x-show="message" x-text="message" style="margin-top:10px;"></div>
+        </div>
 
     </div>
 @endsection

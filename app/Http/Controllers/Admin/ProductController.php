@@ -19,7 +19,8 @@ class ProductController extends Controller
     public function __construct(private ProductService $productService) {}
     public function index()
     {
-        return view('admin.products.index');
+        $categories = Category::all();
+        return view('admin.products.index', compact('categories'));
     }
 
     public function getData(): JsonResponse

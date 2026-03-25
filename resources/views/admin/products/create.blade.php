@@ -1,89 +1,150 @@
 @extends('admin.layouts.app')
+
 @section('content')
-    <h2>Add Product</h2>
 
-    <div x-data="productCreate">
-        @if ($errors->any())
-            <div style="color: red;">
-                @foreach ($errors as $error)
-                    <p> {{ $error }} </p>
-                @endforeach
-            </div>
-        @endif
+    <div class="max-w-3xl mx-auto">
 
-        <form @submit.prevent="submitForm()" enctype="multipart/form-data">
-            <div>
-                <label for="">Category</label>
-                <select x-model="form.category_id">
-                    <option value="">Choose Category</option>
-                    @foreach ($categories as $category)
-                        <option value=" {{ $category->id }} "> {{ $category->name }} </option>
-                    @endforeach
-                </select>
+        {{-- CARD --}}
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+
+            {{-- TITLE --}}
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold text-slate-800">Add Product</h2>
+                <p class="text-sm text-slate-400">Fill product information</p>
             </div>
 
-            <div>
-                <label for="">Product Name</label>
-                <input type="text" x-model="form.name" @input="generateSlug()">
-            </div>
+            <div x-data="productCreate">
 
-            <div>
-                <label for="">Slug</label>
-                <input type="text" x-model="form.slug">
-            </div>
+                {{-- ERROR --}}
+                @if ($errors->any())
+                    <div class="mb-4 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+                        @foreach ($errors as $error)
+                            <p>{{ $error }}</p>
+                        @endforeach
+                    </div>
+                @endif
 
-            <div>
-                <label for="">Price</label>
-                <input type="text" x-model="form.price" min="0">
-            </div>
+                <form @submit.prevent="submitForm()" enctype="multipart/form-data" class="space-y-5">
 
-            <div>
-                <label for="">Stock</label>
-                <input type="text" x-model="form.stock" min="0">
-            </div>
+                    {{-- GRID --}}
+                    <div class="grid md:grid-cols-2 gap-4">
 
-            <div>
-                <label for="">Description</label>
-                <textarea x-model="form.description"></textarea>
-            </div>
-
-            <div>
-                <label for="">Product Image</label>
-                <input type="file" multiple accept="image/*" @change="handleImages($event)">
-            </div>
-
-            {{-- Preview foto yang dipilih --}}
-            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
-                <template x-for="(preview, index) in previews" :key="index">
-                    <div style="position:relative;">
-                        <img :src="preview" style="width:100px; height:100px; object-fit:cover;">
-
-                        {{-- Radio pilih foto primary --}}
+                        {{-- CATEGORY --}}
                         <div>
-                            <input type="radio" :value="index" x-model="form.primary_image"
-                                :id="'primary-' + index">
-                            <label :for="'primary-' + index">Primary</label>
+                            <label class="text-sm text-slate-500">Category</label>
+                            <select x-model="form.category_id"
+                                class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2">
+                                <option value="">Choose Category</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        {{-- NAME --}}
+                        <div>
+                            <label class="text-sm text-slate-500">Product Name</label>
+                            <input type="text" x-model="form.name" @input="generateSlug()"
+                                class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2">
+                        </div>
+
+                        {{-- SLUG --}}
+                        <div>
+                            <label class="text-sm text-slate-500">Slug</label>
+                            <input type="text" x-model="form.slug"
+                                class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 bg-slate-50">
+                        </div>
+
+                        {{-- PRICE --}}
+                        <div>
+                            <label class="text-sm text-slate-500">Price</label>
+                            <input type="text" x-model="form.price" min="0"
+                                class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2">
+                        </div>
+
+                        {{-- STOCK --}}
+                        <div>
+                            <label class="text-sm text-slate-500">Stock</label>
+                            <input type="text" x-model="form.stock" min="0"
+                                class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2">
+                        </div>
+
+                    </div>
+
+                    {{-- DESCRIPTION --}}
+                    <div>
+                        <label class="text-sm text-slate-500">Description</label>
+                        <textarea x-model="form.description" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 min-h-[100px]"></textarea>
+                    </div>
+
+                    {{-- IMAGE --}}
+                    <div>
+                        <label class="text-sm text-slate-500">Product Images</label>
+
+                        <div
+                            class="mt-2 border-2 border-dashed border-slate-300 rounded-xl p-5 text-center cursor-pointer hover:bg-slate-50 transition">
+                            <input type="file" multiple accept="image/*" @change="handleImages($event)" class="hidden"
+                                x-ref="fileInput">
+
+                            <p class="text-sm text-slate-400">Click to upload images</p>
+
+                            <button type="button" @click="$refs.fileInput.click()"
+                                class="mt-2 text-xs text-[#1e3a5f] font-medium">
+                                Browse Files
+                            </button>
                         </div>
                     </div>
-                </template>
+
+                    {{-- PREVIEW --}}
+                    <div class="flex gap-3 flex-wrap">
+                        <template x-for="(preview, index) in previews" :key="index">
+                            <div class="relative group">
+
+                                <img :src="preview" class="w-24 h-24 object-cover rounded-lg border shadow-sm">
+
+                                {{-- PRIMARY --}}
+                                <div class="absolute bottom-1 left-1">
+                                    <input type="radio" :value="index" x-model="form.primary_image"
+                                        :id="'primary-' + index" class="hidden">
+
+                                    <label :for="'primary-' + index"
+                                        class="text-[10px] px-2 py-0.5 rounded text-white cursor-pointer"
+                                        :class="form.primary_image === index ?
+                                            'bg-[#1e3a5f]' :
+                                            'bg-black/60 group-hover:bg-black/80'">
+                                        Primary
+                                    </label>
+                                </div>
+
+                            </div>
+                        </template>
+                    </div>
+
+                    {{-- FOOTER --}}
+                    <div class="flex justify-between items-center pt-4 border-t">
+
+                        <label class="flex items-center gap-2 text-sm text-slate-600">
+                            <input type="checkbox" x-model="form.is_active">
+                            Produk Aktif
+                        </label>
+
+                        <button type="submit"
+                            class="bg-[#1e3a5f] text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-[#162c47]"
+                            :disabled="loading">
+                            <span x-text="loading ? 'Menyimpan...' : 'Simpan Produk'"></span>
+                        </button>
+
+                    </div>
+
+                    {{-- NOTIF --}}
+                    <p x-show="message" x-text="message" class="text-sm mt-2 text-green-600">
+                    </p>
+
+                </form>
             </div>
 
-            <div style="margin-top:10px;">
-                <label>
-                    {{-- 
-                    x-model pada checkbox → otomatis handle true/false
-                --}}
-                    <input type="checkbox" x-model="form.is_active"> Produk Aktif
-                </label>
-            </div>
+        </div>
 
-            <button type="submit" :disabled="loading">
-                <span x-text="loading ? 'Menyimpan...' : 'Simpan Produk'"></span>
-                add
-            </button>
-        </form>
-
-        {{-- nofif --}}
-        <div x-show="message" x-text="message" style="margin-top:10px;"></div>
     </div>
+
 @endsection
